@@ -1,14 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import InsightsIcon from '@mui/icons-material/Insights'
-import PsychologyIcon from '@mui/icons-material/Psychology'
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
+import { CheckCircle2, LineChart, Brain, Rocket } from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
 
-const ICONS = [InsightsIcon, PsychologyIcon, RocketLaunchIcon]
+const ICONS = [LineChart, Brain, Rocket]
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -20,7 +17,7 @@ const item = {
 }
 
 export default function About() {
-  const { t } = useLang()
+  const { t, isRTL } = useLang()
   const { about } = t
 
   return (
@@ -47,13 +44,11 @@ export default function About() {
               >
                 <div className="flex items-center gap-3">
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-slook-purple/30 to-slook-blue/20 ring-1 ring-white/10">
-                    <Icon sx={{ color: '#7240ED' }} />
+                    <Icon className="size-5 text-slook-purple" />
                   </span>
                   <h3 className="text-lg font-semibold">{p.title}</h3>
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-white/70">
-                  {p.body}
-                </p>
+                <p className="mt-4 text-sm leading-relaxed text-white/70">{p.body}</p>
               </motion.div>
             )
           })}
@@ -72,9 +67,7 @@ export default function About() {
               <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-slook-blue">
                 {about.whyKicker}
               </span>
-              <h3 className="mt-3 text-3xl font-bold md:text-4xl">
-                {about.whyTitle}
-              </h3>
+              <h3 className="mt-3 text-3xl font-bold md:text-4xl">{about.whyTitle}</h3>
               <p className="mt-6 text-white/65 md:text-lg">{about.whyClose}</p>
             </div>
 
@@ -82,16 +75,13 @@ export default function About() {
               {about.whyPoints.map((point, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
                   className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-4"
                 >
-                  <CheckCircleIcon
-                    sx={{ color: '#7240ED', fontSize: 22 }}
-                    className="mt-0.5 shrink-0"
-                  />
+                  <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-slook-purple" />
                   <span className="text-white/85">{point}</span>
                 </motion.li>
               ))}

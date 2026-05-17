@@ -1,17 +1,6 @@
 import { Poppins, IBM_Plex_Sans_Arabic } from 'next/font/google'
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import Providers from './providers'
 import './globals.css'
-
-/**
- * Root layout — server component.
- * Loads optimized Google fonts via next/font, then hands children to the
- * client-side Providers wrapper (LangContext + MUI theme).
- *
- * NOTE: The <html dir> attribute is rewritten by LangContext at runtime
- * once the user toggles language. We default to "ar"/"rtl" to match the
- * Slook brand's primary audience and to avoid a hydration flash.
- */
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -52,9 +41,7 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body>
-        <AppRouterCacheProvider options={{ key: 'mui', prepend: true }}>
-          <Providers>{children}</Providers>
-        </AppRouterCacheProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

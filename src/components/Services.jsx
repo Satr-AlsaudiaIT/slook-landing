@@ -1,43 +1,30 @@
 'use client'
 
 import { motion } from 'framer-motion'
-// MUI icons matched per service
-import StorefrontIcon from '@mui/icons-material/Storefront'
-import CampaignIcon from '@mui/icons-material/Campaign'
-import ShareIcon from '@mui/icons-material/Share'
-import WebIcon from '@mui/icons-material/Web'
-import LoyaltyIcon from '@mui/icons-material/Loyalty'
-import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
-import PaletteIcon from '@mui/icons-material/Palette'
-import DescriptionIcon from '@mui/icons-material/Description'
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
-import AssessmentIcon from '@mui/icons-material/Assessment'
-import TvIcon from '@mui/icons-material/Tv'
-import CelebrationIcon from '@mui/icons-material/Celebration'
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard'
-import SignpostIcon from '@mui/icons-material/Signpost'
-import SchoolIcon from '@mui/icons-material/School'
-
+import {
+  Store, Megaphone, Share2, Globe, Heart, Mic,
+  Palette, FileText, Camera, BarChart2, Tv,
+  PartyPopper, Gift, MapPin, GraduationCap,
+} from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
 
-// Icons mapped 1:1 with service order in i18n
 const ICON_MAP = {
-  '01': StorefrontIcon,
-  '02': CampaignIcon,
-  '03': ShareIcon,
-  '04': WebIcon,
-  '05': LoyaltyIcon,
-  '06': RecordVoiceOverIcon,
-  '07': PaletteIcon,
-  '08': DescriptionIcon,
-  '09': PhotoCameraIcon,
-  '10': AssessmentIcon,
-  '11': TvIcon,
-  '12': CelebrationIcon,
-  '13': CardGiftcardIcon,
-  '14': SignpostIcon,
-  '15': SchoolIcon,
+  '01': Store,
+  '02': Megaphone,
+  '03': Share2,
+  '04': Globe,
+  '05': Heart,
+  '06': Mic,
+  '07': Palette,
+  '08': FileText,
+  '09': Camera,
+  '10': BarChart2,
+  '11': Tv,
+  '12': PartyPopper,
+  '13': Gift,
+  '14': MapPin,
+  '15': GraduationCap,
 }
 
 const card = {
@@ -54,7 +41,6 @@ function ServiceCard({ item, accent }) {
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
       className="card-glass group relative overflow-hidden rounded-2xl p-6 transition-shadow hover:shadow-glow"
     >
-      {/* Decorative number watermark */}
       <span
         aria-hidden
         className="pointer-events-none absolute top-3 ltr:right-4 rtl:left-4 service-num opacity-30"
@@ -69,12 +55,10 @@ function ServiceCard({ item, accent }) {
             : 'bg-gradient-to-br from-slook-purple/30 to-slook-blue/20 text-slook-purple'
         }`}
       >
-        <Icon />
+        <Icon className="size-5" />
       </div>
 
-      <h3 className="mt-5 text-lg font-semibold leading-snug">
-        {item.title}
-      </h3>
+      <h3 className="mt-5 text-lg font-semibold leading-snug">{item.title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-white/65">{item.body}</p>
     </motion.article>
   )
@@ -87,10 +71,7 @@ export default function Services() {
   return (
     <section id="services" className="relative py-24 md:py-32">
       <div className="container-slook">
-        <SectionHeading
-          kicker={services.kicker}
-          title={services.title}
-        />
+        <SectionHeading kicker={services.kicker} title={services.title} />
 
         {/* Digital marketing */}
         <div className="mt-16">

@@ -59,6 +59,11 @@ html {
   background: #3d2a82;
 }
 
+/* Flip directional icons (arrows, send) in RTL */
+html[dir='rtl'] .icon-flip {
+  transform: scaleX(-1);
+}
+
 /* Reusable gradient text utility */
 .text-gradient {
   background: linear-gradient(135deg, #7240ed 0%, #0065f7 100%);
@@ -115,22 +120,25 @@ html {
   -webkit-text-fill-color: transparent;
 }
 
-/* MUI dark input overrides */
-.MuiOutlinedInput-root {
-  color: #fff !important;
-}
-.MuiInputLabel-root {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-.MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(114, 64, 237, 0.5) !important;
-}
-.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: var(--slook-purple) !important;
-}
-.MuiInputLabel-root.Mui-focused {
-  color: var(--slook-purple) !important;
+/* shadcn CSS variable tokens — dark-only site */
+:root {
+  --background: #07070d;
+  --foreground: #ffffff;
+  --card: #111118;
+  --card-foreground: #ffffff;
+  --popover: #111118;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #111118;
+  --secondary: #1a1a2e;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a2e;
+  --muted-foreground: #8a8aa3;
+  --accent: #1a1a2e;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.10);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #7240ed;
+  --radius: 0.75rem;
 }

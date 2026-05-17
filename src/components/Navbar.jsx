@@ -2,46 +2,35 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Button, IconButton } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close'
-import LanguageIcon from '@mui/icons-material/Language'
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import { Menu, X, Globe } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { useLang } from '../context/LangContext.jsx'
 import { useContactInfo } from '../context/ContactInfoContext.jsx'
 
-// TODO: replace this SVG with the real Slook diamond logo from your brand kit
+function WhatsAppIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  )
+}
+
 function LogoMark({ className = 'h-8 w-8' }) {
   return (
-    <svg
-      viewBox="0 0 64 64"
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 64 64" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="slookGrad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#7240ED" />
           <stop offset="100%" stopColor="#0065F7" />
         </linearGradient>
       </defs>
-      {/* Diamond outline */}
-      <path
-        d="M32 4 L60 32 L32 60 L4 32 Z"
-        fill="none"
-        stroke="url(#slookGrad)"
-        strokeWidth="3"
-      />
-      {/* Inner S-curve nodes (simplified) */}
+      <path d="M32 4 L60 32 L32 60 L4 32 Z" fill="none" stroke="url(#slookGrad)" strokeWidth="3" />
       <circle cx="32" cy="14" r="4" fill="#7240ED" />
       <circle cx="14" cy="32" r="4" fill="#7240ED" />
       <circle cx="50" cy="32" r="4" fill="#7240ED" />
       <circle cx="32" cy="50" r="4" fill="#7240ED" />
-      <path
-        d="M14 32 Q32 22 50 32 Q32 42 14 32"
-        fill="#7240ED"
-        opacity="0.85"
-      />
+      <path d="M14 32 Q32 22 50 32 Q32 42 14 32" fill="#7240ED" opacity="0.85" />
     </svg>
   )
 }
@@ -72,29 +61,22 @@ export default function Navbar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled
-          ? 'bg-slook-ink/85 backdrop-blur-md border-b border-white/5'
-          : 'bg-transparent'
-      }`}
+      className={cn(
+        'fixed inset-x-0 top-0 z-50 transition-colors duration-300',
+        scrolled && 'bg-slook-ink/85 backdrop-blur-md border-b border-white/5'
+      )}
     >
       <div className="container-slook flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2">
           <LogoMark />
-          <span className="font-display text-xl font-semibold tracking-tight">
-            Slook
-          </span>
+          <span className="font-display text-xl font-semibold tracking-tight">Slook</span>
         </a>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-7 md:flex">
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-sm text-white/70 transition-colors hover:text-white"
-            >
+            <a key={l.href} href={l.href} className="text-sm text-white/70 transition-colors hover:text-white">
               {l.label}
             </a>
           ))}
@@ -104,45 +86,34 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <Button
             onClick={toggle}
-            size="small"
-            startIcon={<LanguageIcon fontSize="small" />}
-            sx={{
-              color: 'rgba(255,255,255,0.85)',
-              borderColor: 'rgba(255,255,255,0.15)',
-              '&:hover': { borderColor: '#7240ED', background: 'rgba(114,64,237,0.08)' },
-            }}
-            variant="outlined"
+            variant="outline"
+            size="sm"
+            className="gap-1.5 border-white/15 bg-transparent text-white/85 hover:border-slook-purple hover:bg-slook-purple/10 hover:text-white"
           >
+            <Globe className="size-4" />
             {lang === 'ar' ? 'EN' : 'AR'}
           </Button>
 
-          <Button
+          <a
             href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            variant="contained"
-            startIcon={<WhatsAppIcon className="icon-flip" />}
-            className="hidden sm:inline-flex"
-            sx={{
-              background: 'linear-gradient(135deg, #7240ED 0%, #0065F7 100%)',
-              boxShadow: '0 0 24px rgba(114, 64, 237, 0.4)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #8350FF 0%, #1B75FF 100%)',
-              },
-            }}
+            className="hidden sm:inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all bg-gradient-to-r from-slook-purple to-slook-blue shadow-[0_0_24px_rgba(114,64,237,0.4)] hover:shadow-[0_0_32px_rgba(114,64,237,0.6)] hover:from-[#8350FF] hover:to-[#1B75FF]"
           >
+            <WhatsAppIcon className="size-4" />
             {t.nav.cta}
-          </Button>
+          </a>
 
           {/* Mobile menu trigger */}
-          <IconButton
-            className="md:!hidden"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden text-white hover:bg-white/10"
             onClick={() => setOpen((v) => !v)}
-            sx={{ color: '#fff' }}
             aria-label="menu"
           >
-            {open ? <CloseIcon /> : <MenuIcon />}
-          </IconButton>
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </Button>
         </div>
       </div>
 
