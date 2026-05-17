@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Slook landing — global styles
+   Brand: Black 40% / Purple #7240ED 30% / Blue #0065F7 15% / White 15%
+   Fonts: Poppins (Latin) + IBM Plex Sans Arabic (fallback for DIN Next LT)
+------------------------------------------------------------------- */
+
+:root {
+  --slook-purple: #7240ed;
+  --slook-blue: #0065f7;
+  --slook-black: #000000;
+  --slook-ink: #07070d;
+}
+
+html,
+body,
+#__next {
+  background: var(--slook-ink);
+  color: #fff;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-poppins), 'Poppins', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[dir='rtl'] body {
+  font-family: var(--font-ibm-arabic), 'IBM Plex Sans Arabic', 'Tajawal',
+    'DIN Next LT Arabic', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+::selection {
+  background: rgba(114, 64, 237, 0.45);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a1f55;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d2a82;
+}
+
+/* Reusable gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, #7240ed 0%, #0065f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Section container */
+.container-slook {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-slook {
+    padding-inline: 2rem;
+  }
+}
+
+/* Glassy card */
+.card-glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.card-glass:hover {
+  border-color: rgba(114, 64, 237, 0.4);
+}
+
+/* Decorative diagonal grid pattern overlay */
+.grid-overlay {
+  background-image: linear-gradient(rgba(114, 64, 237, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(114, 64, 237, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Numbered service card style */
+.service-num {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1;
+  background: linear-gradient(180deg, rgba(114, 64, 237, 0.7), rgba(0, 101, 247, 0.3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* MUI dark input overrides */
+.MuiOutlinedInput-root {
+  color: #fff !important;
+}
+.MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(114, 64, 237, 0.5) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--slook-purple) !important;
+}
+.MuiInputLabel-root.Mui-focused {
+  color: var(--slook-purple) !important;
+}
