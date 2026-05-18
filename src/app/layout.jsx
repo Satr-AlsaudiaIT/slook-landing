@@ -21,7 +21,7 @@ export const metadata = {
   description:
     'Slook is a Marketing Intelligence Ecosystem where AI, data, and human insight build brands that get seen, understood, and chosen.',
   themeColor: '#7240ED',
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/logo-02.png' },
   openGraph: {
     title: 'Slook — Marketing Intelligence Ecosystem',
     description:

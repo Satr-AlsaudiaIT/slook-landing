@@ -16,25 +16,6 @@ function WhatsAppIcon({ className }) {
   )
 }
 
-function LogoMark({ className = 'h-8 w-8' }) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="slookGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#7240ED" />
-          <stop offset="100%" stopColor="#0065F7" />
-        </linearGradient>
-      </defs>
-      <path d="M32 4 L60 32 L32 60 L4 32 Z" fill="none" stroke="url(#slookGrad)" strokeWidth="3" />
-      <circle cx="32" cy="14" r="4" fill="#7240ED" />
-      <circle cx="14" cy="32" r="4" fill="#7240ED" />
-      <circle cx="50" cy="32" r="4" fill="#7240ED" />
-      <circle cx="32" cy="50" r="4" fill="#7240ED" />
-      <path d="M14 32 Q32 22 50 32 Q32 42 14 32" fill="#7240ED" opacity="0.85" />
-    </svg>
-  )
-}
-
 export default function Navbar() {
   const { t, lang, toggle } = useLang()
   const { whatsapp } = useContactInfo()
@@ -69,7 +50,7 @@ export default function Navbar() {
       <div className="container-slook flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2">
-          <LogoMark />
+          <img src="/logo-02.png" alt="Slook logo" className="h-8 w-8 object-contain" />
           <span className="font-display text-xl font-semibold tracking-tight">Slook</span>
         </a>
 
@@ -88,22 +69,21 @@ export default function Navbar() {
             onClick={toggle}
             variant="outline"
             size="sm"
-            className="gap-1.5 border-white/15 bg-transparent text-white/85 hover:border-slook-purple hover:bg-slook-purple/10 hover:text-white"
+            className="gap-1.5 rounded-full border-white/15 bg-transparent text-white/85 hover:border-slook-purple hover:bg-slook-purple/10 hover:text-white"
           >
             <Globe className="size-4" />
             {lang === 'ar' ? 'EN' : 'AR'}
           </Button>
 
           <a
-            href={whatsapp}
-            target="_blank"
+            href={"#contact"}
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all bg-gradient-to-r from-slook-purple to-slook-blue shadow-[0_0_24px_rgba(114,64,237,0.4)] hover:shadow-[0_0_32px_rgba(114,64,237,0.6)] hover:from-[#8350FF] hover:to-[#1B75FF]"
           >
-            <WhatsAppIcon className="size-4" />
+           
             {t.nav.cta}
           </a>
-
+{/* href="#contact" */}
           {/* Mobile menu trigger */}
           <Button
             variant="ghost"
@@ -152,4 +132,4 @@ export default function Navbar() {
       </AnimatePresence>
     </motion.header>
   )
-}
+} 

@@ -16,15 +16,15 @@ export default function Hero() {
       <motion.div
         className="pointer-events-none absolute -top-32 -end-24 h-[28rem] w-[28rem] rounded-full bg-slook-purple/30 blur-3xl"
         animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 8, repeat: Infinity }}
+        transition={{ duration: 4, repeat: Infinity }}
       />
       <motion.div
         className="pointer-events-none absolute -bottom-40 -start-20 h-[24rem] w-[24rem] rounded-full bg-slook-blue/25 blur-3xl"
         animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+        transition={{ duration: 6, repeat: Infinity, delay: 1 }}
       />
 
-      <div className="container-slook relative">
+      <div className="container-slook relative ">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,17 +35,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.7 }}
-            className="text-5xl font-bold leading-tight tracking-tight md:text-7xl"
+            className="text-5xl font-bold !leading-tight tracking-tight md:text-7xl"
           >
             <span className="block text-white">{t.hero.title1}</span>
-            <span className="block text-gradient">{t.hero.title2}</span>
+            <span className="mt-6 block text-gradient">{t.hero.title2}</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.7 }}
-            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70 md:text-xl"
+            className="mx-auto mt-10 max-w-2xl text-lg leading-relaxed text-white/70 md:text-xl"
           >
             {t.hero.subtitle}
           </motion.p>

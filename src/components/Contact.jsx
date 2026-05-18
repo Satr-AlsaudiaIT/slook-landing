@@ -159,7 +159,12 @@ export default function Contact() {
           >
             <InfoCard icon={Phone} label={contact.cards.phone} value={phone} href={phoneLink} />
             <InfoCard icon={Mail} label={contact.cards.email} value={email} href={emailLink} />
-            <InfoCard icon={MapPin} label={contact.cards.location} value={address[lang] || address.en || address.ar} />
+            <InfoCard
+              icon={MapPin}
+              label={contact.cards.location}
+              value={address[lang] || address.en || address.ar}
+              href="https://www.google.com/maps/place/21%C2%B040'10.2%22N+39%C2%B007'20.8%22E/@21.669509,39.1218013,19z"
+            />
           </motion.div>
         </div>
       </div>

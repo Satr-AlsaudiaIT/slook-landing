@@ -20,7 +20,7 @@ export const content = {
       subtitle:
         'نخليك تنشاف، تنفهم، وتنطلب. نحوّل فكرتك من "عادية" لشيء يوقف السوق عنده.',
       primary: 'ابدأ مشروعك',
-      secondary: 'تعرف علينا',
+      secondary: 'تواصل معنا عبر الواتساب',
       stats: [
         { value: '+50', label: 'عميل' },
         { value: '15', label: 'خدمة' },
