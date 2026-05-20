@@ -228,7 +228,7 @@ export const content = {
       subtitle:
         'We make you seen, understood, and chosen. We turn your idea from "ordinary" into something the market stops at.',
       primary: 'Start a project',
-      secondary: 'Learn more',
+      secondary: 'Chat on WhatsApp',
       stats: [
         { value: '+50', label: 'Clients' },
         { value: '15', label: 'Services' },
