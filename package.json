@@ -11,6 +11,7 @@
     "start": "next start -p ${PORT:-3001}",
     "lint": "next lint",
     "clean": "rm -rf .next out",
+<<<<<<< HEAD
     "clean:deps": "rm -rf node_modules .next out",
     "docker:build": "docker build -t slook-landing .",
     "docker:run": "docker run --rm -p 3001:3001 -v $(pwd)/data:/app/data --env-file .env.local slook-landing",
@@ -20,6 +21,12 @@
     "docker:clean": "docker compose down --rmi all --remove-orphans 2>/dev/null || true; docker rmi -f slook-landing:latest 2>/dev/null || true; docker builder prune -f",
     "docker:reset": "npm run docker:clean && docker compose down -v 2>/dev/null; rm -rf data && docker builder prune -af",
     "docker:ps": "docker compose ps"
+=======
+ "docker:build": "docker build --no-cache  -t slook-website .",
+    "docker:run": "docker run -d -p 3001:3001 --name slook-website --restart unless-stopped slook-website",
+    "docker:rebuild": "npm run docker:build && npm run docker:run",
+    "docker:clean": "docker rm -f slook-website || true && docker rmi slook-website || true"
+>>>>>>> d606cfa (docker file)
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

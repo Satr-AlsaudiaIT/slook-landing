@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # syntax=docker/dockerfile:1.7
 # ----------------------------------------------------------------------
 # Slook landing — production Dockerfile (Next.js 15, classic output)
@@ -49,17 +50,28 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+=======
+# Use Bun's official base image
+FROM node:20-alpine
 
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
-
-RUN npm run build
-
-# ============== 3. runner ==========================================
-FROM node:20-alpine AS runner
+# Set working directory
 WORKDIR /app
 
+# Copy dependencies and install with Bun
+COPY package.json ./
+RUN npm install
+
+# Copy the rest of the source files
+>>>>>>> d606cfa (docker file)
+COPY . .
+
+# Build the Next.js app
+RUN npm run build
+
+# Expose Next.js default port
+EXPOSE 3001
+
+<<<<<<< HEAD
 # libc6-compat is needed by some prebuilt native binaries (Node's own + others)
 RUN apk add --no-cache libc6-compat
 
@@ -89,3 +101,7 @@ EXPOSE 3001
 
 # Use the next CLI directly so we don't depend on npm at runtime.
 CMD ["node_modules/.bin/next", "start", "-p", "3001"]
+=======
+# Start the Next.js app
+CMD ["npm", "start"]
+>>>>>>> d606cfa (docker file)
