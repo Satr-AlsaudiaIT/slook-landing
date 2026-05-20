@@ -207,6 +207,7 @@ export const content = {
     footer: {
       tagline: 'منظومة متكاملة لذكاء التسويق',
       rights: 'جميع الحقوق محفوظة',
+      slogan: 'الي ما يشتري.. يتفرج',
     },
   },
 
@@ -416,15 +417,16 @@ export const content = {
     footer: {
       tagline: 'Marketing Intelligence Ecosystem',
       rights: 'All rights reserved',
+      slogan: 'If you don\'t buy... you watch',
     },
   },
 }
 
 // Shared constants (language-agnostic)
 export const constants = {
-  phone: '+966 50 622 8581',
-  phoneLink: 'tel:+966506228581',
-  whatsapp: 'https://wa.me/966506228581',
+  phone: '+966 53 263 5789',
+  phoneLink: 'tel:+966532635789',
+  whatsapp: 'https://wa.me/966532635789',
   email: 'Info@slook.sa',
   emailLink: 'mailto:Info@slook.sa',
   website: 'Slook.sa',

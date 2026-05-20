@@ -35,7 +35,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.7 }}
-            className="text-5xl font-bold !leading-tight tracking-tight md:text-7xl"
+            className="text-5xl font-bold !leading-snug tracking-tight md:text-7xl"
           >
             <span className="block text-white">{t.hero.title1}</span>
             <span className="mt-6 block text-gradient">{t.hero.title2}</span>

@@ -49,9 +49,8 @@ export default function Navbar() {
     >
       <div className="container-slook flex h-16 items-center justify-between gap-4">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
-          <img src="/logo-02.png" alt="Slook logo" className="h-8 w-8 object-contain" />
-          <span className="font-display text-xl font-semibold tracking-tight">Slook</span>
+        <a href="#" className="flex items-center">
+          <img src="/favicon/slook اللي ما يشتري يتفرج.png" alt="Slook logo" className="h-12 object-contain" />
         </a>
 
         {/* Desktop nav */}

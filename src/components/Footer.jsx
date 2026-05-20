@@ -3,6 +3,7 @@
 import { Music } from 'lucide-react'
 import { useLang } from '../context/LangContext.jsx'
 import { useContactInfo } from '../context/ContactInfoContext.jsx'
+import { FaTiktok } from 'react-icons/fa'
 
 function InstagramIcon({ className }) {
   return (
@@ -41,16 +42,18 @@ export default function Footer() {
     { Icon: InstagramIcon, href: social.instagram, label: 'Instagram' },
     { Icon: XIcon, href: social.twitter, label: 'X / Twitter' },
     { Icon: LinkedInIcon, href: social.linkedin, label: 'LinkedIn' },
-    { Icon: Music, href: social.tiktok, label: 'TikTok' },
+    { Icon: FaTiktok, href: social.tiktok, label: 'TikTok' },
   ].filter((s) => s.href)
 
   return (
     <footer className="relative border-t border-white/5 bg-slook-ink/80 py-12">
       <div className="container-slook">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
-          <div className="text-center md:text-start">
-            <div className="font-display text-2xl font-semibold tracking-tight">Slook</div>
-            <p className="mt-1 text-sm text-white/55">{t.footer.tagline}</p>
+          <div className="text-center">
+            <img src="/favicon/slook اللي ما يشتري يتفرج.png" alt="Slook logo" className="h-16 object-contain" />
+            <p className="mt-2 text-slook-purple text-sm font-semibold">
+              {t.footer.slogan}
+            </p>
           </div>
 
           <div className="flex items-center gap-1">

@@ -1,18 +1,26 @@
-import { Poppins, IBM_Plex_Sans_Arabic } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import Providers from './providers'
 import './globals.css'
+
+/**
+ * Fonts
+ *  - Poppins (Google Fonts)        → used only in the LTR / English version
+ *  - DIN Next LT Arabic (self-hosted) → used only in the RTL / Arabic version,
+ *    loaded via @font-face in globals.css from `public/fonts/`.
+ *
+ * We use @font-face (not next/font/local) for the Arabic font so the build
+ * doesn't fail when the licensed files aren't present yet — the browser just
+ * falls back to a system Arabic font until you add them.
+ *
+ * Drop your DIN Next LT files at:
+ *    public/fonts/DINNextLTArabic-Regular.woff2  (or .woff / .ttf / .otf)
+ *    public/fonts/DINNextLTArabic-Bold.woff2
+ */
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-poppins',
-  display: 'swap',
-})
-
-const ibmArabic = IBM_Plex_Sans_Arabic({
-  subsets: ['arabic'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-ibm-arabic',
   display: 'swap',
 })
 
@@ -37,7 +45,7 @@ export default function RootLayout({ children }) {
     <html
       lang="ar"
       dir="rtl"
-      className={`${poppins.variable} ${ibmArabic.variable}`}
+      className={poppins.variable}
       suppressHydrationWarning
     >
       <body>

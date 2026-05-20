@@ -101,9 +101,9 @@ function seed(db) {
        (id, phone, email, whatsapp, address_ar, address_en, instagram, twitter, linkedin, tiktok)
        VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
-      '+966 50 622 8581',
+      '+966 53 263 5789',
       'Info@slook.sa',
-      'https://wa.me/966506228581',
+      'https://wa.me/966532635789',
       'جدة - حي البساتين، King of the Royal Hall',
       'Jeddah — Al Basateen Dist., King of the Royal Hall',
       'https://instagram.com/slook.sa',

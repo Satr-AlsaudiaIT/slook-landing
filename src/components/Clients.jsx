@@ -1,34 +1,131 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
 
-/**
- * Clients wall.
- *
- * Placeholder approach (per project brief):
- * Each slot is a styled cell with the client name.
- * To swap in real assets:
- *   1. Drop the logo SVG/PNG into /public/clients/
- *   2. Replace the <span> text inside <ClientSlot> with <img src="/clients/saudia.svg" />
- */
+const clientLogos = [
+  { id: 1, name: 'Client 1', src: '/clients/clients logos-01.png' },
+  { id: 2, name: 'Client 2', src: '/clients/clients logos-02.png' },
+  { id: 3, name: 'Client 3', src: '/clients/clients logos-03.png' },
+  { id: 4, name: 'Client 4', src: '/clients/clients logos-04.png' },
+  { id: 5, name: 'Client 5', src: '/clients/clients logos-05.png' },
+  { id: 6, name: 'Client 6', src: '/clients/clients logos-06.png' },
+  { id: 7, name: 'Client 7', src: '/clients/clients logos-07.png' },
+  { id: 8, name: 'Client 8', src: '/clients/clients logos-08.png' },
+  { id: 9, name: 'Client 9', src: '/clients/clients logos-09.png' },
+  { id: 10, name: 'Client 10', src: '/clients/clients logos-10.png' },
+  { id: 11, name: 'Client 11', src: '/clients/clients logos-11.png' },
+  { id: 12, name: 'Client 12', src: '/clients/clients logos-12.png' },
+  { id: 13, name: 'Client 13', src: '/clients/clients logos-13.png' },
+  { id: 14, name: 'Client 14', src: '/clients/clients logos-14.png' },
+]
 
-function ClientSlot({ name, index }) {
+function ClientCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [autoPlay, setAutoPlay] = useState(true)
+
+  const itemsPerView = 6
+  const totalSlides = clientLogos.length
+
+  useEffect(() => {
+    if (!autoPlay) return
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % totalSlides)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [autoPlay, totalSlides])
+
+  const nextSlide = () => {
+    setAutoPlay(false)
+    setCurrentIndex((prev) => (prev + 1) % totalSlides)
+  }
+
+  const prevSlide = () => {
+    setAutoPlay(false)
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides)
+  }
+
+  const getVisibleLogos = () => {
+    const visible = []
+    for (let i = 0; i < itemsPerView; i++) {
+      visible.push(clientLogos[(currentIndex + i) % totalSlides])
+    }
+    return visible
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: (index % 12) * 0.04, duration: 0.4 }}
-      whileHover={{ scale: 1.05, borderColor: 'rgba(114, 64, 237, 0.6)' }}
-      className="flex h-24 items-center justify-center rounded-xl border border-white/8 bg-white/[0.02] px-4 transition-colors"
-    >
-      {/* TODO: replace with <img src="/clients/{slug}.svg" alt={name} /> */}
-      <span className="text-center text-sm font-medium text-white/55">
-        {name}
-      </span>
-    </motion.div>
+    <div className="space-y-6">
+      <div className="relative">
+        {/* Carousel container */}
+        <div className="overflow-hidden">
+          <motion.div
+            className="flex gap-4"
+            animate={{ x: 0 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          >
+            {getVisibleLogos().map((logo, idx) => (
+              <motion.div
+                key={`${logo.id}-${idx}`}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.05, duration: 0.3 }}
+                className="flex min-w-[calc(16.666%-1rem)] flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur transition-colors hover:border-white/20 hover:bg-white/[0.05]"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  className="max-h-16 w-full object-contain"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Navigation buttons */}
+        <button
+          onClick={prevSlide}
+          onMouseEnter={() => setAutoPlay(false)}
+          onMouseLeave={() => setAutoPlay(true)}
+          className="absolute -left-6 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition-all hover:border-white/40 hover:bg-white/10 hover:text-white"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="size-5" />
+        </button>
+        <button
+          onClick={nextSlide}
+          onMouseEnter={() => setAutoPlay(false)}
+          onMouseLeave={() => setAutoPlay(true)}
+          className="absolute -right-6 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition-all hover:border-white/40 hover:bg-white/10 hover:text-white"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="size-5" />
+        </button>
+      </div>
+
+      {/* Slide indicators */}
+      <div className="flex items-center justify-center gap-2">
+        {Array.from({ length: Math.ceil(totalSlides / itemsPerView) }).map(
+          (_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setAutoPlay(false)
+                setCurrentIndex(idx * itemsPerView)
+              }}
+              className={`h-2 rounded-full transition-all ${
+                idx === Math.floor(currentIndex / itemsPerView)
+                  ? 'w-6 bg-slook-purple'
+                  : 'w-2 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          )
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -51,10 +148,8 @@ export default function Clients() {
           sub={clients.sub}
         />
 
-        <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {clients.list.map((name, i) => (
-            <ClientSlot key={i} name={name} index={i} />
-          ))}
+        <div className="mt-14">
+          <ClientCarousel />
         </div>
 
         {/* +50 badge */}

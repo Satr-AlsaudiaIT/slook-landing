@@ -5,8 +5,41 @@
 /* ------------------------------------------------------------------
    Slook landing — global styles
    Brand: Black 40% / Purple #7240ED 30% / Blue #0065F7 15% / White 15%
-   Fonts: Poppins (Latin) + IBM Plex Sans Arabic (fallback for DIN Next LT)
+   Fonts:
+     • English (dir=ltr) → Poppins (Google Fonts via next/font)
+     • Arabic  (dir=rtl) → DIN Next LT Arabic (self-hosted, @font-face below)
 ------------------------------------------------------------------- */
+
+/* ---- DIN Next LT Arabic — self-hosted from public/fonts/ ----
+   If the files don't exist yet, the browser silently skips these and falls
+   back to Tajawal / Geeza Pro / sans-serif. No build failure. Add either:
+     • DINNextLTArabic-Regular.woff2  (preferred, smallest)
+     • DINNextLTArabic-Regular.woff
+     • DINNextLTArabic-Regular.ttf
+     • DINNextLTArabic-Regular.otf
+   ...and the same for *-Bold. The browser uses whichever format it finds. */
+@font-face {
+  font-family: 'DIN Next LT Arabic';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src:
+    url('/fonts/DINNextLTArabic-Regular.woff2') format('woff2'),
+    url('/fonts/DINNextLTArabic-Regular.woff')  format('woff'),
+    url('/fonts/DINNextLTArabic-Regular.ttf')   format('truetype'),
+    url('/fonts/DINNextLTArabic-Regular.otf')   format('opentype');
+}
+@font-face {
+  font-family: 'DIN Next LT Arabic';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src:
+    url('/fonts/DINNextLTArabic-Bold.woff2') format('woff2'),
+    url('/fonts/DINNextLTArabic-Bold.woff')  format('woff'),
+    url('/fonts/DINNextLTArabic-Bold.ttf')   format('truetype'),
+    url('/fonts/DINNextLTArabic-Bold.otf')   format('opentype');
+}
 
 :root {
   --slook-purple: #7240ed;
@@ -23,15 +56,18 @@ body,
   min-height: 100%;
 }
 
+/* Default = LTR / English → Poppins */
 body {
   font-family: var(--font-poppins), 'Poppins', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* RTL / Arabic → DIN Next LT only.
+   System fallbacks (Tajawal, Geeza Pro) keep the page readable in Arabic
+   until the DIN files are present in public/fonts/. */
 html[dir='rtl'] body {
-  font-family: var(--font-ibm-arabic), 'IBM Plex Sans Arabic', 'Tajawal',
-    'DIN Next LT Arabic', sans-serif;
+  font-family: 'DIN Next LT Arabic', 'Tajawal', 'Geeza Pro', sans-serif;
 }
 
 html {
@@ -142,3 +178,13 @@ html[dir='rtl'] .icon-flip {
   --ring: #7240ed;
   --radius: 0.75rem;
 }
+
+    .text-slook-purple {
+              font-size: 1rem;
+
+    }
+
+    .text-slook-blue {
+              font-size: 1rem;
+
+    }

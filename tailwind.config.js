@@ -54,11 +54,15 @@ module.exports = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        
       },
       fontFamily: {
-        sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        ar: ['"IBM Plex Sans Arabic"', '"Tajawal"', '"DIN Next LT Arabic"', 'sans-serif'],
-        display: ['Poppins', 'sans-serif'],
+        // English / LTR
+        sans: ['var(--font-poppins)', 'Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-poppins)', 'Poppins', 'sans-serif'],
+        // Arabic / RTL — DIN Next LT loaded via @font-face in globals.css
+        // (use `font-ar` to force DIN regardless of dir)
+        ar: ['"DIN Next LT Arabic"', '"Tajawal"', 'sans-serif'],
       },
       backgroundImage: {
         'slook-gradient':
@@ -81,6 +85,7 @@ module.exports = {
         marquee: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+      
         },
       },
     },
