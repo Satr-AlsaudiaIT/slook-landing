@@ -62,7 +62,7 @@ function ClientCarousel() {
         {/* Carousel container */}
         <div className="overflow-hidden">
           <motion.div
-            className="flex gap-4"
+            className="flex gap-3 sm:gap-4"
             animate={{ x: 0 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
@@ -72,12 +72,12 @@ function ClientCarousel() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.05, duration: 0.3 }}
-                className="flex min-w-[calc(16.666%-1rem)] flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur transition-colors hover:border-white/20 hover:bg-white/[0.05]"
+               className="flex h-[100px] w-[calc((100%-2rem)/3)] shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] p-3 transition-colors hover:border-white/20 hover:bg-white/[0.05] sm:w-[calc((100%-2.5rem)/4)] md:w-[calc((100%-4rem)/5)] lg:w-[calc((100%-5rem)/6)]"
               >
                 <img
                   src={logo.src}
                   alt={logo.name}
-                  className="max-h-16 w-full object-contain"
+                  className="block max-h-14 max-w-full object-contain sm:max-h-16"
                 />
               </motion.div>
             ))}

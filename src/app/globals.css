@@ -188,3 +188,19 @@ html[dir='rtl'] .icon-flip {
               font-size: 1rem;
 
     }
+
+ html[dir='rtl'] body {
+  font-family: 'DIN Next LT Arabic', 'Tajawal', 'Geeza Pro', Arial, sans-serif;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html[dir='rtl'] .text-slook-purple,
+html[dir='rtl'] .text-slook-blue {
+  font-family: 'DIN Next LT Arabic', 'Tajawal', 'Geeza Pro', Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+  font-synthesis: none;
+}
