@@ -40,7 +40,7 @@ export default function Hero() {
             className="text-5xl font-bold !leading-snug tracking-tight md:text-7xl"
           >
             <span className="block text-white">{t.hero.title1}</span>
-            <span className="mt-6 block text-gradient">{t.hero.title2}</span>
+            <span className="mt-2 block text-gradient">{t.hero.title2}</span>
           </motion.h1>
 
           <motion.p

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import {
   Store, Megaphone, Share2, Globe, Heart, Mic,
   Palette, FileText, Camera, BarChart2, Tv,
-  PartyPopper, Gift, MapPin, GraduationCap,
+  PartyPopper, Gift, MapPin, GraduationCap, Briefcase,
 } from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
@@ -25,6 +25,7 @@ const ICON_MAP = {
   '13': Gift,
   '14': MapPin,
   '15': GraduationCap,
+  '16': Briefcase,
 }
 
 const card = {

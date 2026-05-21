@@ -8,7 +8,6 @@ import { useLang } from '../context/LangContext.jsx'
 
 const clientLogos = [
   { id: 1, name: 'Client 1', src: '/clients/clients logos-01.png' },
-  { id: 2, name: 'Client 2', src: '/clients/clients logos-02.png' },
   { id: 3, name: 'Client 3', src: '/clients/clients logos-03.png' },
   { id: 4, name: 'Client 4', src: '/clients/clients logos-04.png' },
   { id: 5, name: 'Client 5', src: '/clients/clients logos-05.png' },
