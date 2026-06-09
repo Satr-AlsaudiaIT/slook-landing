@@ -16,6 +16,9 @@ import {
   setSubmissionAdminNotes,
   deleteSubmission,
   setAppUserActive,
+  updateApplicationStatus,
+  setApplicationAdminNotes,
+  deleteApplication,
 } from '@/lib/db'
 import { deleteUploadIfExists } from '@/lib/uploads'
 
@@ -182,6 +185,40 @@ export async function setUserActiveAction(formData) {
   if (!id) return
   setAppUserActive(id, isActive)
   revalidatePath('/admin/users')
+}
+
+/* ----------------------- /apply applications ---------------------- */
+
+const VALID_APPLICATION_STATUSES = new Set(['new', 'reviewed', 'archived'])
+
+export async function setApplicationStatusAction(formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  const status = String(formData.get('status') || '')
+  if (!id || !VALID_APPLICATION_STATUSES.has(status)) return
+  updateApplicationStatus(id, status)
+  revalidatePath('/admin/applications')
+}
+
+export async function saveApplicationNotesAction(prevState, formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  const notes = String(formData.get('notes') || '').trim()
+  if (!id) return { ok: false, id, error: 'missing_fields' }
+  setApplicationAdminNotes(id, notes || null)
+  revalidatePath('/admin/applications')
+  return { ok: true, id }
+}
+
+export async function deleteApplicationAction(formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  if (!id) return
+  const row = deleteApplication(id)
+  if (row?.photo_path) {
+    await deleteUploadIfExists(row.photo_path)
+  }
+  revalidatePath('/admin/applications')
 }
 
 /* ----------------------------- helpers ---------------------------- */

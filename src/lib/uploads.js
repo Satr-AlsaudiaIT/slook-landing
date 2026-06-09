@@ -98,3 +98,81 @@ export async function deleteUploadIfExists(relativePath) {
     // best-effort cleanup
   }
 }
+
+/* ----------------------------------------------------------------
+ * Profile picture uploads for the /apply form
+ * ----------------------------------------------------------------
+ * Accepts JPEG, PNG, WEBP only — verified by both MIME header AND
+ * magic bytes in the file body so a forged Content-Type alone can't
+ * sneak a different format past the check.
+ */
+
+export const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // 5 MB
+
+const IMAGE_SIGNATURES = [
+  // JPEG: FF D8 FF
+  { mime: 'image/jpeg', ext: 'jpg',  test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
+  // PNG: 89 50 4E 47 0D 0A 1A 0A
+  { mime: 'image/png',  ext: 'png',  test: (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 },
+  // WEBP: 'RIFF' + 4 bytes size + 'WEBP'
+  {
+    mime: 'image/webp',
+    ext: 'webp',
+    test: (b) =>
+      b.length >= 12 &&
+      b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46 &&
+      b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50,
+  },
+]
+
+const ALLOWED_IMAGE_MIMES = new Set(IMAGE_SIGNATURES.map((s) => s.mime))
+
+/**
+ * Validate + save an uploaded profile image. Returns
+ * { relativePath, originalName, size, mime }.
+ * Throws an Error with .code set to one of:
+ *   'no_file' | 'too_large' | 'bad_mime' | 'bad_signature'
+ */
+export async function saveUploadedImage(file) {
+  if (!file || typeof file === 'string' || !file.size) {
+    const err = new Error('No file provided')
+    err.code = 'no_file'
+    throw err
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    const err = new Error('File too large')
+    err.code = 'too_large'
+    throw err
+  }
+  if (file.type && !ALLOWED_IMAGE_MIMES.has(file.type)) {
+    const err = new Error('Only JPG, PNG, or WEBP allowed')
+    err.code = 'bad_mime'
+    throw err
+  }
+
+  const arrayBuf = await file.arrayBuffer()
+  const buf = Buffer.from(arrayBuf)
+
+  // Magic-bytes sniff — pick the first signature that matches
+  const sig = IMAGE_SIGNATURES.find((s) => buf.length >= 4 && s.test(buf))
+  if (!sig) {
+    const err = new Error('File is not a real image')
+    err.code = 'bad_signature'
+    throw err
+  }
+
+  const dir = uploadsDir()
+  fs.mkdirSync(dir, { recursive: true })
+
+  const id = randomUUID()
+  const filename = `${id}.${sig.ext}`
+  const absPath = path.join(dir, filename)
+  await fs.promises.writeFile(absPath, buf)
+
+  return {
+    relativePath: path.posix.join('uploads', filename),
+    originalName: typeof file.name === 'string' ? file.name : null,
+    size: buf.length,
+    mime: sig.mime,
+  }
+}

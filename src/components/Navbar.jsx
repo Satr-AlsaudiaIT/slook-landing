@@ -75,14 +75,11 @@ export default function Navbar() {
           </Button>
 
           <a
-            href={"#contact"}
-            rel="noopener noreferrer"
+            href="/apply"
             className="hidden sm:inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all bg-gradient-to-r from-slook-purple to-slook-blue shadow-[0_0_24px_rgba(114,64,237,0.4)] hover:shadow-[0_0_32px_rgba(114,64,237,0.6)] hover:from-[#8350FF] hover:to-[#1B75FF]"
           >
-           
-            {t.nav.cta}
+            {t.apply.navCta}
           </a>
-{/* href="#contact" */}
           {/* Mobile menu trigger */}
           <Button
             variant="ghost"
@@ -118,12 +115,11 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/apply"
+                onClick={() => setOpen(false)}
                 className="mt-2 rounded-md bg-gradient-to-r from-slook-purple to-slook-blue px-4 py-2 text-center text-sm font-semibold"
               >
-                {t.nav.cta}
+                {t.apply.navCta}
               </a>
             </nav>
           </motion.div>

@@ -106,6 +106,26 @@ function migrate(db) {
     CREATE INDEX IF NOT EXISTS idx_submissions_user    ON submissions(user_id);
     CREATE INDEX IF NOT EXISTS idx_submissions_status  ON submissions(status);
     CREATE INDEX IF NOT EXISTS idx_submissions_created ON submissions(created_at DESC);
+
+    -- Public /apply form: open to anyone, no auth needed
+    CREATE TABLE IF NOT EXISTS applications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      full_name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      description TEXT NOT NULL,
+      photo_path TEXT NOT NULL,         -- relative path under data/ (uploads/xxx.jpg)
+      photo_original_name TEXT,
+      photo_size INTEGER,
+      photo_mime TEXT,                  -- image/jpeg | image/png | image/webp
+      date_of_birth TEXT NOT NULL,      -- ISO yyyy-mm-dd
+      status TEXT NOT NULL DEFAULT 'new', -- new | reviewed | archived
+      admin_notes TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_applications_status  ON applications(status);
+    CREATE INDEX IF NOT EXISTS idx_applications_created ON applications(created_at DESC);
   `)
 }
 
@@ -323,5 +343,74 @@ export function deleteSubmission(id) {
     .prepare('SELECT pdf_path FROM submissions WHERE id = ?')
     .get(id)
   getDb().prepare('DELETE FROM submissions WHERE id = ?').run(id)
+  return row
+}
+
+/* ============================================================
+ * Applications (/apply public form)
+ * ============================================================ */
+
+export function createApplication({
+  fullName,
+  email,
+  phone,
+  description,
+  photoPath,
+  photoOriginalName,
+  photoSize,
+  photoMime,
+  dateOfBirth,
+}) {
+  const info = getDb()
+    .prepare(
+      `INSERT INTO applications
+         (full_name, email, phone, description, photo_path,
+          photo_original_name, photo_size, photo_mime, date_of_birth)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      fullName,
+      email,
+      phone,
+      description,
+      photoPath,
+      photoOriginalName ?? null,
+      photoSize ?? null,
+      photoMime ?? null,
+      dateOfBirth
+    )
+  return Number(info.lastInsertRowid)
+}
+
+export function getApplication(id) {
+  return getDb().prepare('SELECT * FROM applications WHERE id = ?').get(id)
+}
+
+export function listApplications({ limit = 200 } = {}) {
+  return getDb()
+    .prepare(
+      `SELECT * FROM applications ORDER BY created_at DESC LIMIT ?`
+    )
+    .all(limit)
+}
+
+export function updateApplicationStatus(id, status) {
+  getDb()
+    .prepare(`UPDATE applications SET status = ? WHERE id = ?`)
+    .run(status, id)
+}
+
+export function setApplicationAdminNotes(id, notes) {
+  getDb()
+    .prepare(`UPDATE applications SET admin_notes = ? WHERE id = ?`)
+    .run(notes ?? null, id)
+}
+
+export function deleteApplication(id) {
+  // Returns the row first so the caller can clean up the photo file
+  const row = getDb()
+    .prepare('SELECT photo_path FROM applications WHERE id = ?')
+    .get(id)
+  getDb().prepare('DELETE FROM applications WHERE id = ?').run(id)
   return row
 }

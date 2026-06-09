@@ -66,12 +66,10 @@ export default function Hero() {
               {t.hero.primary}
             </a>
             <a
-              href={whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/apply"
               className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-7 py-3 text-base font-semibold text-white transition-all hover:border-slook-purple hover:bg-slook-purple/8"
             >
-              {t.hero.secondary}
+              {t.apply.navCta}
             </a>
           </motion.div>
 
