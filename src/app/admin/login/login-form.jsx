@@ -1,6 +1,7 @@
 'use client'
 
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { TextField, Button, Alert } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 import { loginAction } from '../actions'
@@ -32,7 +33,7 @@ function SubmitButton() {
 }
 
 export default function LoginForm() {
-  const [state, formAction] = useFormState(loginAction, { ok: null })
+  const [state, formAction] = useActionState(loginAction, { ok: null })
 
   return (
     <form action={formAction} className="flex flex-col gap-4">

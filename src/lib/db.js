@@ -41,6 +41,7 @@ export function getDb() {
 
 function migrate(db) {
   db.exec(`
+    -- Admin accounts (the existing admin dashboard)
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
@@ -75,6 +76,36 @@ function migrate(db) {
 
     CREATE INDEX IF NOT EXISTS idx_messages_status ON messages(status);
     CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at DESC);
+
+    -- Public portal accounts (separate from admin users above)
+    CREATE TABLE IF NOT EXISTS app_users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      name TEXT NOT NULL,
+      password_hash TEXT NOT NULL,
+      is_active INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_app_users_email ON app_users(email);
+
+    -- Submissions: name + description + PDF, one row per user submission
+    CREATE TABLE IF NOT EXISTS submissions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES app_users(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      description TEXT NOT NULL,
+      pdf_path TEXT NOT NULL,            -- relative path under data/ (e.g. uploads/xxxx.pdf)
+      pdf_original_name TEXT,
+      pdf_size INTEGER,
+      status TEXT NOT NULL DEFAULT 'new', -- new | reviewed | archived
+      admin_notes TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_submissions_user    ON submissions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_submissions_status  ON submissions(status);
+    CREATE INDEX IF NOT EXISTS idx_submissions_created ON submissions(created_at DESC);
   `)
 }
 
@@ -183,4 +214,114 @@ export function getUserByUsername(username) {
 
 export function getUserById(id) {
   return getDb().prepare('SELECT id, username FROM users WHERE id = ?').get(id)
+}
+
+/* ============================================================
+ * Public-portal accounts (app_users table)
+ * ============================================================ */
+
+export function createAppUser({ email, name, passwordHash }) {
+  const info = getDb()
+    .prepare(
+      `INSERT INTO app_users (email, name, password_hash) VALUES (?, ?, ?)`
+    )
+    .run(email, name, passwordHash)
+  return Number(info.lastInsertRowid)
+}
+
+export function getAppUserByEmail(email) {
+  return getDb()
+    .prepare('SELECT * FROM app_users WHERE email = ?')
+    .get(email)
+}
+
+export function getAppUserById(id) {
+  return getDb()
+    .prepare('SELECT id, email, name, is_active, created_at FROM app_users WHERE id = ?')
+    .get(id)
+}
+
+export function listAppUsers({ limit = 200 } = {}) {
+  return getDb()
+    .prepare(
+      `SELECT u.id, u.email, u.name, u.is_active, u.created_at,
+              (SELECT COUNT(*) FROM submissions s WHERE s.user_id = u.id) AS submission_count
+       FROM app_users u
+       ORDER BY u.created_at DESC
+       LIMIT ?`
+    )
+    .all(limit)
+}
+
+export function setAppUserActive(id, isActive) {
+  getDb()
+    .prepare(`UPDATE app_users SET is_active = ? WHERE id = ?`)
+    .run(isActive ? 1 : 0, id)
+}
+
+/* ============================================================
+ * Submissions
+ * ============================================================ */
+
+export function createSubmission({ userId, name, description, pdfPath, pdfOriginalName, pdfSize }) {
+  const info = getDb()
+    .prepare(
+      `INSERT INTO submissions
+         (user_id, name, description, pdf_path, pdf_original_name, pdf_size)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+    .run(userId, name, description, pdfPath, pdfOriginalName ?? null, pdfSize ?? null)
+  return Number(info.lastInsertRowid)
+}
+
+export function getSubmission(id) {
+  return getDb()
+    .prepare(
+      `SELECT s.*, u.email AS user_email, u.name AS user_name
+       FROM submissions s
+       JOIN app_users u ON u.id = s.user_id
+       WHERE s.id = ?`
+    )
+    .get(id)
+}
+
+export function listSubmissionsByUser(userId) {
+  return getDb()
+    .prepare(
+      `SELECT * FROM submissions WHERE user_id = ? ORDER BY created_at DESC`
+    )
+    .all(userId)
+}
+
+export function listSubmissionsForAdmin({ limit = 200 } = {}) {
+  return getDb()
+    .prepare(
+      `SELECT s.*, u.email AS user_email, u.name AS user_name
+       FROM submissions s
+       JOIN app_users u ON u.id = s.user_id
+       ORDER BY s.created_at DESC
+       LIMIT ?`
+    )
+    .all(limit)
+}
+
+export function updateSubmissionStatus(id, status) {
+  getDb()
+    .prepare(`UPDATE submissions SET status = ? WHERE id = ?`)
+    .run(status, id)
+}
+
+export function setSubmissionAdminNotes(id, notes) {
+  getDb()
+    .prepare(`UPDATE submissions SET admin_notes = ? WHERE id = ?`)
+    .run(notes ?? null, id)
+}
+
+export function deleteSubmission(id) {
+  // Returns the row first so the caller can clean up the PDF file
+  const row = getDb()
+    .prepare('SELECT pdf_path FROM submissions WHERE id = ?')
+    .get(id)
+  getDb().prepare('DELETE FROM submissions WHERE id = ?').run(id)
+  return row
 }

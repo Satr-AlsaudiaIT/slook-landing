@@ -32,8 +32,10 @@ export default async function AdminLayout({ children }) {
         </div>
 
         <nav className="mt-2 flex flex-1 flex-col gap-1 px-3">
-          <NavItem href="/admin/messages" label="Messages" />
-          <NavItem href="/admin/contact" label="Contact info" />
+          <NavItem href="/admin/messages"    label="Messages" />
+          <NavItem href="/admin/submissions" label="Submissions" />
+          <NavItem href="/admin/users"       label="Portal users" />
+          <NavItem href="/admin/contact"     label="Contact info" />
         </nav>
 
         <form action={logoutAction} className="m-3">

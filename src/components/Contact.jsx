@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Send, Phone, Mail, MapPin } from 'lucide-react'
@@ -71,7 +72,7 @@ export default function Contact() {
   const { contact } = t
   const { whatsapp, phone, phoneLink, email, emailLink, address } = useContactInfo()
 
-  const [state, formAction] = useFormState(submitMessage, { ok: null })
+  const [state, formAction] = useActionState(submitMessage, { ok: null })
   const formRef = useRef(null)
 
   useEffect(() => {

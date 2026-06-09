@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { TextField, Button, Chip, Alert } from '@mui/material'
 import ReplyIcon from '@mui/icons-material/Reply'
 import ArchiveIcon from '@mui/icons-material/Archive'
@@ -41,7 +42,7 @@ function ReplyButton() {
 
 export default function MessageRow({ message }) {
   const [open, setOpen] = useState(message.status === 'new')
-  const [state, formAction] = useFormState(replyToMessageAction, { ok: null })
+  const [state, formAction] = useActionState(replyToMessageAction, { ok: null })
 
   const status = STATUS_COLOR[message.status] || STATUS_COLOR.new
   const created = new Date(message.created_at + 'Z').toLocaleString()

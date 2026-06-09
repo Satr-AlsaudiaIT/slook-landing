@@ -1,6 +1,7 @@
 'use client'
 
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { TextField, Button, Alert } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import { updateContactAction } from '../actions'
@@ -30,7 +31,7 @@ function SaveButton() {
 }
 
 export default function ContactForm({ initial }) {
-  const [state, formAction] = useFormState(updateContactAction, { ok: null })
+  const [state, formAction] = useActionState(updateContactAction, { ok: null })
 
   return (
     <form action={formAction} className="card-glass flex flex-col gap-5 rounded-2xl p-6 md:p-8">

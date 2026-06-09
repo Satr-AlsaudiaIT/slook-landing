@@ -12,7 +12,12 @@ import {
   markMessageReplied,
   archiveMessage,
   deleteMessage,
+  updateSubmissionStatus,
+  setSubmissionAdminNotes,
+  deleteSubmission,
+  setAppUserActive,
 } from '@/lib/db'
+import { deleteUploadIfExists } from '@/lib/uploads'
 
 /* ------------------------------ auth ------------------------------ */
 
@@ -132,6 +137,51 @@ export async function deleteMessageAction(formData) {
   const id = Number(formData.get('id'))
   if (id) deleteMessage(id)
   revalidatePath('/admin/messages')
+}
+
+/* --------------------- portal submissions / users ----------------- */
+
+const VALID_SUBMISSION_STATUSES = new Set(['new', 'reviewed', 'archived'])
+
+export async function setSubmissionStatusAction(formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  const status = String(formData.get('status') || '')
+  if (!id || !VALID_SUBMISSION_STATUSES.has(status)) return
+  updateSubmissionStatus(id, status)
+  revalidatePath('/admin/submissions')
+  revalidatePath('/portal/dashboard')
+}
+
+export async function saveSubmissionNotesAction(prevState, formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  const notes = String(formData.get('notes') || '').trim()
+  if (!id) return { ok: false, id, error: 'missing_fields' }
+  setSubmissionAdminNotes(id, notes || null)
+  revalidatePath('/admin/submissions')
+  return { ok: true, id }
+}
+
+export async function deleteSubmissionAction(formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  if (!id) return
+  // deleteSubmission returns the row so we can also remove the PDF file
+  const row = deleteSubmission(id)
+  if (row?.pdf_path) {
+    await deleteUploadIfExists(row.pdf_path)
+  }
+  revalidatePath('/admin/submissions')
+}
+
+export async function setUserActiveAction(formData) {
+  await requireAdmin()
+  const id = Number(formData.get('id'))
+  const isActive = formData.get('isActive') === '1'
+  if (!id) return
+  setAppUserActive(id, isActive)
+  revalidatePath('/admin/users')
 }
 
 /* ----------------------------- helpers ---------------------------- */
