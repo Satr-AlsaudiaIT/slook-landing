@@ -6,6 +6,7 @@ import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { CheckCircle2, Send, UserCircle2 } from 'lucide-react'
 import { useLang } from '../../context/LangContext'
+import { nationalityOptionsForLang } from '../../lib/nationalities'
 import { submitApplicationAction } from './actions'
 
 function SubmitButton({ label, pending: pendingLabel }) {
@@ -23,11 +24,14 @@ function SubmitButton({ label, pending: pendingLabel }) {
 }
 
 export default function ApplyForm() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const { apply } = t
   const [state, formAction] = useActionState(submitApplicationAction, { ok: null })
   const formRef = useRef(null)
   const [photoPreview, setPhotoPreview] = useState(null)
+
+  // Build the localized {key: label} map for the nationality select once per lang
+  const nationalityOptions = nationalityOptionsForLang(lang)
 
   // Reset preview after successful submit
   useEffect(() => {
@@ -104,6 +108,20 @@ export default function ApplyForm() {
           <Field name="dateOfBirth" type="date" label={apply.form.dateOfBirth} required />
           <Field name="phone" type="tel" label={apply.form.phone} required autoComplete="tel" />
           <Field name="email" type="email" label={apply.form.email} required autoComplete="email" />
+          <SelectField
+            name="workLocation"
+            label={apply.form.workLocation}
+            placeholder={apply.form.workLocationPlaceholder}
+            options={apply.form.workLocationOptions}
+            required
+          />
+          <SelectField
+            name="nationality"
+            label={apply.form.nationality}
+            placeholder={apply.form.nationalityPlaceholder}
+            options={nationalityOptions}
+            required
+          />
         </div>
 
         <label className="block">
@@ -113,7 +131,7 @@ export default function ApplyForm() {
             required
             rows={4}
             maxLength={5000}
-            className="mt-1.5 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-slook-purple focus:bg-white/[0.07]"
+            className="mt-1.5 w-full min-h-[11rem] rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-slook-purple focus:bg-white/[0.07]"
           />
           <span className="mt-1 block text-xs text-white/40">{apply.form.descriptionHint}</span>
         </label>
@@ -141,7 +159,7 @@ export default function ApplyForm() {
                 accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
                 required
                 onChange={onPhotoChange}
-                className="mt-1.5 block w-full text-sm text-white/80 file:me-3 file:rounded-md file:border-0 file:bg-slook-purple/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slook-purple/30"
+                className="mt-1.5 block h-12 w-full text-sm text-white/80 file:me-3 file:rounded-md file:border-0 file:bg-slook-purple/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slook-purple/30"
               />
               <span className="mt-1 block text-xs text-white/40">{apply.form.photoHint}</span>
             </label>
@@ -161,7 +179,7 @@ export default function ApplyForm() {
 
 function Field({ label, name, type = 'text', required, maxLength, autoComplete }) {
   return (
-    <label className="block">
+    <label className="block w-full">
       <span className="block text-sm text-white/75">{label}</span>
       <input
         name={name}
@@ -169,8 +187,51 @@ function Field({ label, name, type = 'text', required, maxLength, autoComplete }
         required={required}
         maxLength={maxLength}
         autoComplete={autoComplete}
-        className="mt-1.5 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-slook-purple focus:bg-white/[0.07]"
+        className="mt-1.5 h-12 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white outline-none transition-colors focus:border-slook-purple focus:bg-white/[0.07]"
       />
+    </label>
+  )
+}
+
+/**
+ * Native <select> for work location + nationality.
+ *
+ * `options` is an object whose KEYS are the canonical (English) values that
+ * get sent to the server and stored in the DB, and whose VALUES are the
+ * localized labels shown to the user. So picking "جدة" still submits "Jeddah".
+ */
+function SelectField({ label, name, placeholder, options, required }) {
+  return (
+    <label className="block w-full">
+      <span className="block text-sm text-white/75">{label}</span>
+      <div className="relative">
+        <select
+          name={name}
+          required={required}
+          defaultValue=""
+          className="mt-1.5 h-12 w-full appearance-none rounded-lg border border-white/10 bg-white/5 px-3 ltr:pe-10 rtl:ps-10 text-sm text-white outline-none transition-colors focus:border-slook-purple focus:bg-white/[0.07]"
+        >
+          <option value="" disabled>
+            {placeholder}
+          </option>
+          {Object.entries(options).map(([value, label]) => (
+            <option key={value} value={value} className="bg-slook-ink text-white">
+              {label}
+            </option>
+          ))}
+        </select>
+        <svg
+          className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-white/60"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
     </label>
   )
 }

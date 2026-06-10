@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext } from 'react'
+import { constants } from '../i18n.js'
 
 /**
  * Holds the live contact info loaded server-side from the DB.
@@ -24,9 +25,16 @@ export function ContactInfoProvider({ value, children }) {
 export function useContactInfo() {
   const ctx = useContext(ContactInfoContext)
   if (!ctx) {
-    throw new Error(
-      'useContactInfo must be used inside <ContactInfoProvider>'
-    )
+    return {
+      phone: constants.phone,
+      phoneLink: constants.phoneLink,
+      email: constants.email,
+      emailLink: constants.emailLink,
+      whatsapp: constants.whatsapp,
+      address: { ar: '', en: '' },
+      social: constants.social,
+      updatedAt: null,
+    }
   }
   return ctx
 }

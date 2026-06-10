@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createApplication } from '@/lib/db'
 import { saveUploadedImage } from '@/lib/uploads'
+import { NATIONALITY_KEYS } from '@/lib/nationalities'
 
 /**
  * Public /apply form submission. Open to anyone, no auth needed.
@@ -14,6 +15,12 @@ import { saveUploadedImage } from '@/lib/uploads'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // Saudi-friendly but permissive — accepts +966..., 05..., spaces and dashes
 const PHONE_RE = /^[+0-9\s()-]{7,20}$/
+
+// Canonical allowed values — stored in DB as the English label.
+// Work locations are a small fixed set, defined inline.
+// Nationalities come from src/lib/nationalities.js (single source of truth
+// shared with the form).
+const WORK_LOCATIONS = new Set(['Jeddah', 'Riyadh', 'Eastern Province'])
 
 function normalizeEmail(input) {
   return String(input || '').trim().toLowerCase()
@@ -42,10 +49,20 @@ export async function submitApplicationAction(prevState, formData) {
   const phone = String(formData.get('phone') || '').trim()
   const description = String(formData.get('description') || '').trim()
   const dateOfBirth = String(formData.get('dateOfBirth') || '').trim()
+  const workLocation = String(formData.get('workLocation') || '').trim()
+  const nationality = String(formData.get('nationality') || '').trim()
   const photo = formData.get('photo')
 
   // Field validation
-  if (!fullName || !email || !phone || !description || !dateOfBirth) {
+  if (
+    !fullName ||
+    !email ||
+    !phone ||
+    !description ||
+    !dateOfBirth ||
+    !workLocation ||
+    !nationality
+  ) {
     return { ok: false, error: 'missing_fields' }
   }
   if (fullName.length > 200) {
@@ -62,6 +79,12 @@ export async function submitApplicationAction(prevState, formData) {
   }
   if (!isValidDate(dateOfBirth)) {
     return { ok: false, error: 'invalid_dob' }
+  }
+  if (!WORK_LOCATIONS.has(workLocation)) {
+    return { ok: false, error: 'invalid_work_location' }
+  }
+  if (!NATIONALITY_KEYS.has(nationality)) {
+    return { ok: false, error: 'invalid_nationality' }
   }
 
   // Photo upload
@@ -83,6 +106,8 @@ export async function submitApplicationAction(prevState, formData) {
       photoSize: saved.size,
       photoMime: saved.mime,
       dateOfBirth,
+      workLocation,
+      nationality,
     })
     revalidatePath('/admin/applications')
     return { ok: true, id }

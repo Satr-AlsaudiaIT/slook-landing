@@ -11,12 +11,13 @@
     "start": "next start -p ${PORT:-3001}",
     "lint": "next lint",
     "clean": "rm -rf .next out",
- "docker:build": "docker build --no-cache  -t slook-website .",
+    "docker:build": "docker build --no-cache  -t slook-website .",
     "docker:run": "docker run -d -p 3001:3001 --name slook-website --restart unless-stopped slook-website",
     "docker:rebuild": "npm run docker:build && npm run docker:run",
     "docker:clean": "docker rm -f slook-website || true && docker rmi slook-website || true"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.2.5",
     "@base-ui/react": "^1.4.1",
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
@@ -24,6 +25,7 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/material-nextjs": "^6.1.6",
+    "antd": "^6.4.3",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^11.5.0",
     "class-variance-authority": "^0.7.1",

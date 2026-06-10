@@ -7,6 +7,8 @@ import {
   Mail,
   Phone,
   CalendarDays,
+  MapPin,
+  Flag,
   CheckCircle2,
   Archive,
   Trash2,
@@ -110,7 +112,7 @@ export default function ApplicationCard({ application }) {
       {open && (
         <div className="border-t border-white/5 p-4">
           {/* Quick facts */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Fact icon={Mail}        label="Email"         value={application.email} href={`mailto:${application.email}`} />
             <Fact icon={Phone}       label="Phone"         value={application.phone} href={`tel:${application.phone}`} dir="ltr" />
             <Fact
@@ -120,6 +122,16 @@ export default function ApplicationCard({ application }) {
                 application.date_of_birth +
                 (age != null ? ` · ${age} yrs` : '')
               }
+            />
+            <Fact
+              icon={MapPin}
+              label="Preferred location"
+              value={application.work_location || '—'}
+            />
+            <Fact
+              icon={Flag}
+              label="Nationality"
+              value={application.nationality || '—'}
             />
           </div>
 

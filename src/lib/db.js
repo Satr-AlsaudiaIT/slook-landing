@@ -127,6 +127,18 @@ function migrate(db) {
     CREATE INDEX IF NOT EXISTS idx_applications_status  ON applications(status);
     CREATE INDEX IF NOT EXISTS idx_applications_created ON applications(created_at DESC);
   `)
+
+  // Idempotent column adds — SQLite doesn't support "ADD COLUMN IF NOT EXISTS",
+  // so we check PRAGMA table_info first. Safe to run on every boot.
+  addColumnIfMissing(db, 'applications', 'work_location', 'TEXT')
+  addColumnIfMissing(db, 'applications', 'nationality',   'TEXT')
+}
+
+function addColumnIfMissing(db, table, column, type) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all()
+  if (!cols.find((c) => c.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`)
+  }
 }
 
 function seed(db) {
@@ -360,13 +372,16 @@ export function createApplication({
   photoSize,
   photoMime,
   dateOfBirth,
+  workLocation,
+  nationality,
 }) {
   const info = getDb()
     .prepare(
       `INSERT INTO applications
          (full_name, email, phone, description, photo_path,
-          photo_original_name, photo_size, photo_mime, date_of_birth)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          photo_original_name, photo_size, photo_mime, date_of_birth,
+          work_location, nationality)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       fullName,
@@ -377,7 +392,9 @@ export function createApplication({
       photoOriginalName ?? null,
       photoSize ?? null,
       photoMime ?? null,
-      dateOfBirth
+      dateOfBirth,
+      workLocation ?? null,
+      nationality ?? null
     )
   return Number(info.lastInsertRowid)
 }
