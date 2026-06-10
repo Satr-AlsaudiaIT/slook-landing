@@ -34,6 +34,7 @@ export default function Navbar() {
     { href: '#process', label: t.nav.process },
     { href: '#services', label: t.nav.services },
     { href: '#clients', label: t.nav.clients },
+    { href: '/apply', label: t.nav.apply },
     { href: '#contact', label: t.nav.contact },
   ]
 
@@ -75,10 +76,10 @@ export default function Navbar() {
           </Button>
 
           <a
-            href="/apply"
+            href="#contact"
             className="hidden sm:inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all bg-gradient-to-r from-slook-purple to-slook-blue shadow-[0_0_24px_rgba(114,64,237,0.4)] hover:shadow-[0_0_32px_rgba(114,64,237,0.6)] hover:from-[#8350FF] hover:to-[#1B75FF]"
           >
-            {t.apply.navCta}
+            {t.nav.cta}
           </a>
           {/* Mobile menu trigger */}
           <Button
@@ -115,11 +116,11 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="/apply"
+                href="#contact"
                 onClick={() => setOpen(false)}
                 className="mt-2 rounded-md bg-gradient-to-r from-slook-purple to-slook-blue px-4 py-2 text-center text-sm font-semibold"
               >
-                {t.apply.navCta}
+                {t.nav.cta}
               </a>
             </nav>
           </motion.div>

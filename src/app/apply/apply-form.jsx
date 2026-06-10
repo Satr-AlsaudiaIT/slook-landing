@@ -101,9 +101,9 @@ export default function ApplyForm() {
       >
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Field name="fullName" label={apply.form.fullName} required maxLength={200} autoComplete="name" />
-          <Field name="email" type="email" label={apply.form.email} required autoComplete="email" />
-          <Field name="phone" type="tel" label={apply.form.phone} required autoComplete="tel" />
           <Field name="dateOfBirth" type="date" label={apply.form.dateOfBirth} required />
+          <Field name="phone" type="tel" label={apply.form.phone} required autoComplete="tel" />
+          <Field name="email" type="email" label={apply.form.email} required autoComplete="email" />
         </div>
 
         <label className="block">
