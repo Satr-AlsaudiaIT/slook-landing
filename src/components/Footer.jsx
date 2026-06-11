@@ -3,7 +3,7 @@
 import { Music } from 'lucide-react'
 import { useLang } from '../context/LangContext.jsx'
 import { useContactInfo } from '../context/ContactInfoContext.jsx'
-import { FaTiktok } from 'react-icons/fa'
+import { FaTiktok, FaSnapchatGhost } from 'react-icons/fa'
 
 function InstagramIcon({ className }) {
   return (
@@ -40,7 +40,7 @@ export default function Footer() {
 
   const socials = [
     { Icon: InstagramIcon, href: social.instagram, label: 'Instagram' },
-    { Icon: XIcon, href: social.twitter, label: 'X / Twitter' },
+    { Icon: FaSnapchatGhost, href: social.twitter, label: 'Snapchat' },
     { Icon: LinkedInIcon, href: social.linkedin, label: 'LinkedIn' },
     { Icon: FaTiktok, href: social.tiktok, label: 'TikTok' },
   ].filter((s) => s.href)
