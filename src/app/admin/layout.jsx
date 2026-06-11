@@ -7,6 +7,7 @@
 import Link from 'next/link'
 import { getSession } from '@/lib/auth'
 import { logoutAction } from './actions'
+import MobileNav from './mobile-nav'
 
 export const metadata = {
   title: 'Slook · Admin',
@@ -50,14 +51,17 @@ export default async function AdminLayout({ children }) {
       </aside>
 
       <main className="flex-1 overflow-x-hidden">
-        {/* Mobile top bar with logout */}
-        <div className="flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-3 md:hidden">
+        {/* Mobile top bar with navigation */}
+        <div className="relative flex items-center justify-between border-b border-white/5 bg-black/40 px-4 py-3 md:hidden">
           <div className="text-sm font-semibold">Slook Admin</div>
-          <form action={logoutAction}>
-            <button type="submit" className="text-xs text-white/70 hover:text-white">
-              Sign out
-            </button>
-          </form>
+          <div className="flex items-center gap-3">
+            <MobileNav />
+            <form action={logoutAction}>
+              <button type="submit" className="text-xs text-white/70 hover:text-white">
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
 
         <div className="p-6 md:p-10">{children}</div>

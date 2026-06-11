@@ -11,6 +11,17 @@ const ERR_MAP = {
   invalid_credentials: 'Invalid username or password.',
 }
 
+const textFieldSx = {
+  '& .MuiOutlinedInput-input': { color: '#fff' },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' },
+    '&.Mui-focused fieldset': { borderColor: '#7240ED' },
+  },
+  '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.7)' },
+  '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+}
+
 function SubmitButton() {
   const { pending } = useFormStatus()
   return (
@@ -49,6 +60,7 @@ export default function LoginForm() {
         required
         fullWidth
         autoFocus
+        sx={textFieldSx}
       />
       <TextField
         name="password"
@@ -57,6 +69,7 @@ export default function LoginForm() {
         autoComplete="current-password"
         required
         fullWidth
+        sx={textFieldSx}
       />
       <SubmitButton />
     </form>

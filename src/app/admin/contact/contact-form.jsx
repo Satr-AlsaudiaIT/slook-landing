@@ -11,6 +11,17 @@ const ERR_MAP = {
   server_error: 'Server error — try again.',
 }
 
+const textFieldSx = {
+  '& .MuiOutlinedInput-input': { color: '#fff' },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' },
+    '&.Mui-focused fieldset': { borderColor: '#7240ED' },
+  },
+  '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.7)' },
+  '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+}
+
 function SaveButton() {
   const { pending } = useFormStatus()
   return (
@@ -54,6 +65,7 @@ export default function ContactForm({ initial }) {
             defaultValue={initial?.phone || ''}
             required
             fullWidth
+            sx={textFieldSx}
           />
           <TextField
             name="email"
@@ -62,6 +74,7 @@ export default function ContactForm({ initial }) {
             defaultValue={initial?.email || ''}
             required
             fullWidth
+            sx={textFieldSx}
           />
         </Row>
         <TextField
@@ -70,6 +83,7 @@ export default function ContactForm({ initial }) {
           defaultValue={initial?.whatsapp || ''}
           required
           fullWidth
+          sx={textFieldSx}
         />
       </Section>
 
@@ -82,6 +96,7 @@ export default function ContactForm({ initial }) {
             fullWidth
             multiline
             minRows={2}
+            sx={textFieldSx}
           />
           <TextField
             name="address_en"
@@ -90,6 +105,7 @@ export default function ContactForm({ initial }) {
             fullWidth
             multiline
             minRows={2}
+            sx={textFieldSx}
           />
         </Row>
       </Section>
@@ -101,12 +117,14 @@ export default function ContactForm({ initial }) {
             label="Instagram URL"
             defaultValue={initial?.instagram || ''}
             fullWidth
+            sx={textFieldSx}
           />
           <TextField
             name="twitter"
             label="X / Twitter URL"
             defaultValue={initial?.twitter || ''}
             fullWidth
+            sx={textFieldSx}
           />
         </Row>
         <Row>
@@ -115,12 +133,14 @@ export default function ContactForm({ initial }) {
             label="LinkedIn URL"
             defaultValue={initial?.linkedin || ''}
             fullWidth
+            sx={textFieldSx}
           />
           <TextField
             name="tiktok"
             label="TikTok URL"
             defaultValue={initial?.tiktok || ''}
             fullWidth
+            sx={textFieldSx}
           />
         </Row>
       </Section>
