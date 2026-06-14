@@ -119,6 +119,31 @@ export default function Services() {
             ))}
           </motion.div>
         </div>
+
+        {/* Training and empowerment */}
+        {services.training && (
+          <div className="mt-20">
+            <div className="mb-8 flex items-center gap-4">
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-slook-purple/40 to-transparent" />
+              <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slook-purple">
+                {services.trainingLabel}
+              </h3>
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-slook-purple/40 to-transparent" />
+            </div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {services.training.map((s) => (
+                <ServiceCard key={s.n} item={s} accent="purple" />
+              ))}
+            </motion.div>
+          </div>
+        )}
       </div>
     </section>
   )
