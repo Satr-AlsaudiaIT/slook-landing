@@ -1,5 +1,6 @@
 import { Poppins } from 'next/font/google'
 import Providers from './providers'
+import ClarityScript from '../components/ClarityScript'
 import './globals.css'
 
 /**
@@ -25,13 +26,13 @@ const poppins = Poppins({
 })
 
 export const metadata = {
-  title: 'Slook — Marketing Intelligence Ecosystem',
+  title: 'Slook — Slook Marketing Agency',
   description:
     'Slook is a Marketing Intelligence Ecosystem where AI, data, and human insight build brands that get seen, understood, and chosen.',
   themeColor: '#7240ED',
   icons: { icon: '/logo-02.png' },
   openGraph: {
-    title: 'Slook — Marketing Intelligence Ecosystem',
+    title: 'Slook — Slook Marketing Agency',
     description:
       'AI + data + human insight. We make you seen, understood, and chosen.',
     url: 'https://slook.sa',
@@ -50,6 +51,7 @@ export default function RootLayout({ children }) {
     >
       <body>
         <Providers>{children}</Providers>
+        <ClarityScript />
       </body>
     </html>
   )

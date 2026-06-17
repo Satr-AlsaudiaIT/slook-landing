@@ -15,7 +15,7 @@ export const content = {
       cta: 'ابدأ مشروعك',
     },
     hero: {
-      eyebrow: 'منظومة متكاملة لذكاء التسويق',
+      eyebrow: 'سلوك للخدمات التسويقية',
       title1: 'اللي ما يشتري ..',
       title2: 'يتفرج',
       subtitle:
@@ -372,7 +372,7 @@ export const content = {
       cta: 'Start a project',
     },
     hero: {
-      eyebrow: 'Marketing Intelligence Ecosystem',
+      eyebrow: 'Slook Marketing Agency',
       title1: 'Not just an agency.',
       title2: 'A different conduct.',
       subtitle:
@@ -711,7 +711,7 @@ export const content = {
       },
     },
     footer: {
-      tagline: 'Marketing Intelligence Ecosystem',
+      tagline: 'Slook Marketing Agency',
       rights: 'All rights reserved',
       slogan: 'If you don\'t buy... you watch',
     },
