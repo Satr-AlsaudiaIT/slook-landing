@@ -204,3 +204,37 @@ html[dir='rtl'] .text-slook-blue {
   letter-spacing: 0;
   font-synthesis: none;
 }
+
+.services-tabs .ant-tabs-nav {
+  margin-bottom: 0px;
+}
+
+.services-tabs .ant-tabs-tab {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  color: rgb(255 255 255 / 0.5);
+}
+
+.services-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: var(--slook-purple);
+}
+
+/* .services-tabs .ant-tabs-tab-active {
+  background: rgba(114, 64, 237, 0.18) !important;
+  border-color: rgba(114, 64, 237, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(114, 64, 237, 0.2);
+} */
+
+.services-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--slook-purple) !important;
+}
+
+.services-tabs .ant-tabs-ink-bar {
+  background: var(--slook-purple);
+}
+
+.services-tabs .ant-tabs-nav::before {
+  border-bottom: none !important;
+}

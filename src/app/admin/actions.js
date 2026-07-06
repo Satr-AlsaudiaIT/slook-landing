@@ -19,6 +19,7 @@ import {
   updateApplicationStatus,
   setApplicationAdminNotes,
   deleteApplication,
+  updateService
 } from '@/lib/db'
 import { deleteUploadIfExists } from '@/lib/uploads'
 
@@ -219,6 +220,24 @@ export async function deleteApplicationAction(formData) {
     await deleteUploadIfExists(row.photo_path)
   }
   revalidatePath('/admin/applications')
+}
+
+/* ----------------------------- services ---------------------------- */
+
+export async function updateServiceAction(data) {
+  updateService({
+    id: data.id,
+    title_en: data.title_en,
+    title_ar: data.title_ar,
+    body_en: data.body_en,
+    body_ar: data.body_ar,
+    icon_slug: data.icon_slug,
+    category: data.category,
+    sort_order: Number(data.sort_order),
+    is_active: data.is_active ? 1 : 0,
+  })
+
+  revalidatePath('/admin/services')
 }
 
 /* ----------------------------- helpers ---------------------------- */

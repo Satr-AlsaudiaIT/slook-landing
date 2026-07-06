@@ -8,24 +8,26 @@ import {
 } from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
+import { useEffect, useState } from 'react'
 
+// Change to predefined list of icon options and dynamically import them
 const ICON_MAP = {
-  '01': Store,
-  '02': Megaphone,
-  '03': Share2,
-  '04': Globe,
-  '05': Heart,
-  '06': Mic,
-  '07': Palette,
-  '08': FileText,
-  '09': Camera,
-  '10': BarChart2,
-  '11': Tv,
-  '12': PartyPopper,
-  '13': Gift,
-  '14': MapPin,
-  '15': GraduationCap,
-  '16': Briefcase,
+  store: Store,
+  megaphone: Megaphone,
+  share2: Share2,
+  globe: Globe,
+  heart: Heart,
+  mic: Mic,
+  palette: Palette,
+  filetext: FileText,
+  camera: Camera,
+  barchart2: BarChart2,
+  tv: Tv,
+  partypopper: PartyPopper,
+  gift: Gift,
+  mappin: MapPin,
+  graduationcap: GraduationCap,
+  briefcase: Briefcase,
 }
 
 const card = {
@@ -33,41 +35,62 @@ const card = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
-function ServiceCard({ item, accent }) {
-  const Icon = ICON_MAP[item.n]
-  return (
-    <motion.article
-      variants={card}
-      whileHover={{ y: -6 }}
-      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      className="card-glass group relative overflow-hidden rounded-2xl p-6 transition-shadow hover:shadow-glow"
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute top-3 ltr:right-4 rtl:left-4 service-num opacity-30"
-      >
-        {item.n}
-      </span>
+export default function Services() {
+  const { t, lang } = useLang()
+  const { services } = t
 
-      <div
-        className={`flex h-12 w-12 items-center justify-center rounded-xl ring-1 ring-white/10 ${
-          accent === 'blue'
+  const [serviceList, setServiceList] = useState([])
+
+  // Get services from db
+  useEffect(() => {
+    async function loadServices() {
+      const res = await fetch('/api/services');
+      const data = await res.json();
+      console.log(data)
+      setServiceList(data);
+    }
+    loadServices();
+  }, [])
+
+  // Filter services by category
+  const digitalServices = serviceList.filter(s => s.category === 'digital');
+  const offlineServices = serviceList.filter(s => s.category === 'offline');
+  const trainingServices = serviceList.filter(s => s.category === 'training');
+
+  function ServiceCard({ item, accent }) {
+    const Icon = ICON_MAP[item.icon_slug]
+    return (
+      <motion.article
+        variants={card}
+        whileHover={{ y: -6 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+        className="card-glass group relative overflow-hidden rounded-2xl p-6 transition-shadow hover:shadow-glow"
+      >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-3 ltr:right-4 rtl:left-4 service-num opacity-30"
+        >
+          {String(item.sort_order ?? item.id).padStart(2, '0')}
+        </span>
+
+        <div
+          className={`flex h-12 w-12 items-center justify-center rounded-xl ring-1 ring-white/10 ${accent === 'blue'
             ? 'bg-gradient-to-br from-slook-blue/30 to-slook-purple/20 text-slook-blue'
             : 'bg-gradient-to-br from-slook-purple/30 to-slook-blue/20 text-slook-purple'
-        }`}
-      >
-        <Icon className="size-5" />
-      </div>
+            }`}
+        >
+          <Icon className="size-5" />
+        </div>
 
-      <h3 className="mt-5 text-lg font-semibold leading-snug">{item.title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-white/65">{item.body}</p>
-    </motion.article>
-  )
-}
+        <h3 className="mt-5 text-lg font-semibold leading-snug">{lang === 'ar' ? item.title_ar : item.title_en}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-white/65">{lang === 'ar' ? item.body_ar : item.body_en}</p>
+      </motion.article>
+    )
+  }
 
-export default function Services() {
-  const { t } = useLang()
-  const { services } = t
+  if (!serviceList.length) {
+    return <></>;
+  }
 
   return (
     <section id="services" className="relative py-24 md:py-32">
@@ -85,14 +108,15 @@ export default function Services() {
           </div>
 
           <motion.div
+            key={`digital-${lang}`}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: '-60px' }}
             variants={{ show: { transition: { staggerChildren: 0.08 } } }}
             className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {services.digital.map((s) => (
-              <ServiceCard key={s.n} item={s} accent="purple" />
+            {digitalServices.map((s) => (
+              <ServiceCard key={s.id} item={s} accent="purple" />
             ))}
           </motion.div>
         </div>
@@ -108,14 +132,15 @@ export default function Services() {
           </div>
 
           <motion.div
+            key={`offline-${lang}`}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: '-60px' }}
             variants={{ show: { transition: { staggerChildren: 0.06 } } }}
             className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {services.offline.map((s) => (
-              <ServiceCard key={s.n} item={s} accent="blue" />
+            {offlineServices.map((s) => (
+              <ServiceCard key={s.id} item={s} accent="blue" />
             ))}
           </motion.div>
         </div>
@@ -132,14 +157,15 @@ export default function Services() {
             </div>
 
             <motion.div
+              key={`training-${lang}`}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               variants={{ show: { transition: { staggerChildren: 0.08 } } }}
               className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
             >
-              {services.training.map((s) => (
-                <ServiceCard key={s.n} item={s} accent="purple" />
+              {trainingServices.map((s) => (
+                <ServiceCard key={s.id} item={s} accent="purple" />
               ))}
             </motion.div>
           </div>

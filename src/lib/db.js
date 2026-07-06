@@ -126,12 +126,32 @@ function migrate(db) {
 
     CREATE INDEX IF NOT EXISTS idx_applications_status  ON applications(status);
     CREATE INDEX IF NOT EXISTS idx_applications_created ON applications(created_at DESC);
+
+    CREATE TABLE IF NOT EXISTS services (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title_en TEXT NOT NULL,
+      title_ar TEXT NOT NULL,
+      body_en TEXT NOT NULL,
+      body_ar TEXT NOT NULL,
+      icon_slug TEXT NOT NULL,
+      category TEXT NOT NULL CHECK(category IN ('digital', 'offline', 'training')),
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      is_active INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_services_category
+      ON services(category);
+
+    CREATE INDEX IF NOT EXISTS idx_services_order
+      ON services(category, sort_order);
   `)
 
   // Idempotent column adds — SQLite doesn't support "ADD COLUMN IF NOT EXISTS",
   // so we check PRAGMA table_info first. Safe to run on every boot.
   addColumnIfMissing(db, 'applications', 'work_location', 'TEXT')
-  addColumnIfMissing(db, 'applications', 'nationality',   'TEXT')
+  addColumnIfMissing(db, 'applications', 'nationality', 'TEXT')
 }
 
 function addColumnIfMissing(db, table, column, type) {
@@ -176,6 +196,57 @@ function seed(db) {
     )
     // eslint-disable-next-line no-console
     console.log('[slook] seeded default contact_info')
+  }
+
+  const servicesExist = db
+    .prepare('SELECT COUNT(*) AS count FROM services')
+    .get()
+
+  if (servicesExist.count === 0) {
+    const insert = db.prepare(`
+    INSERT INTO services
+      (title_en, title_ar, body_en, body_ar, icon_slug, category, sort_order)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `)
+
+    const insertMany = db.transaction((services) => {
+      for (const service of services) {
+        insert.run(
+          service.title_en,
+          service.title_ar,
+          service.body_en,
+          service.body_ar,
+          service.icon_slug,
+          service.category,
+          service.sort_order
+        )
+      }
+    })
+
+    insertMany([
+      {
+        title_en: 'Store Management',
+        title_ar: 'إدارة المتاجر',
+        body_en: '...',
+        body_ar: '...',
+        icon_slug: 'store',
+        category: 'digital',
+        sort_order: 1,
+      },
+      {
+        title_en: 'Marketing Campaigns',
+        title_ar: 'الحملات التسويقية',
+        body_en: '...',
+        body_ar: '...',
+        icon_slug: 'megaphone',
+        category: 'digital',
+        sort_order: 2,
+      },
+
+      // ...
+    ])
+
+    console.log('[slook] seeded services')
   }
 }
 
@@ -430,4 +501,104 @@ export function deleteApplication(id) {
     .get(id)
   getDb().prepare('DELETE FROM applications WHERE id = ?').run(id)
   return row
+}
+
+/* ============================================================
+ * Services
+ * ============================================================ */
+
+export function listServices() {
+  return getDb()
+    .prepare(`
+      SELECT *
+      FROM services
+      WHERE is_active = 1
+      ORDER BY category, sort_order
+    `)
+    .all()
+}
+
+export function updateService({ id, title_en, title_ar, body_en, body_ar, icon_slug, category, sort_order, is_active }) {
+  const stmt = getDb().prepare(`
+    UPDATE services
+    SET
+      title_en = ?,
+      title_ar = ?,
+      body_en = ?,
+      body_ar = ?,
+      icon_slug = ?,
+      category = ?,
+      sort_order = ?,
+      is_active = ?,
+      updated_at = datetime('now')
+    WHERE id = ?
+  `);
+
+  stmt.run(
+    title_en,
+    title_ar,
+    body_en,
+    body_ar,
+    icon_slug,
+    category,
+    sort_order,
+    is_active ? 1 : 0,
+    id
+  )
+
+  return getDb()
+    .prepare('SELECT * FROM services WHERE id = ?')
+    .get(id)
+}
+
+export function deleteService(id) {
+  const service = getDb()
+    .prepare('SELECT * FROM services WHERE id = ?')
+    .get(id)
+
+  if (!service) return null
+
+  getDb()
+    .prepare('DELETE FROM services WHERE id = ?')
+    .run(id)
+
+  return service
+}
+
+export function createService({
+  title_en,
+  title_ar,
+  body_en,
+  body_ar,
+  icon_slug,
+  category,
+  sort_order,
+  is_active,
+}) {
+  const result = getDb().prepare(`
+    INSERT INTO services (
+      title_en,
+      title_ar,
+      body_en,
+      body_ar,
+      icon_slug,
+      category,
+      sort_order,
+      is_active
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    title_en,
+    title_ar,
+    body_en,
+    body_ar,
+    icon_slug,
+    category,
+    sort_order,
+    is_active ? 1 : 0
+  )
+
+  return getDb()
+    .prepare('SELECT * FROM services WHERE id = ?')
+    .get(result.lastInsertRowid)
 }
