@@ -2,6 +2,7 @@ import React from "react";
 import { listServices } from '@/lib/db'
 import { Tabs } from 'antd';
 import ServicesTable from "./servicesTable";
+import AddServiceButton from "./AddServiceButton";
 
 export default async function ServicesPage() {
 
@@ -34,13 +35,8 @@ export default async function ServicesPage() {
     return (
         <div className="mx-auto max-w-4xl">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-                <div>
-                    <h1 className="text-2xl font-semibold">Services</h1>
-                </div>
-                <div className="flex gap-4 text-xs">
-                    {/* TODO: Add component */}
-                    <p>Add Service</p>
-                </div>
+                <h1 className="text-2xl font-semibold">Services</h1>
+                <AddServiceButton/>
             </div>
 
             {services.length === 0 ? (
@@ -49,7 +45,7 @@ export default async function ServicesPage() {
                 </div>
             ) : (
                 <div className="card-glass overflow-hidden rounded-2xl">
-                    <Tabs defaultActiveKey="1" items={items} className="services-tabs"/>
+                    <Tabs defaultActiveKey="1" items={items} className="services-tabs" />
                     {/* <table className="w-full text-sm">
                         <thead className="bg-white/5 text-left text-xs uppercase tracking-wider text-white/50">
                             <tr>

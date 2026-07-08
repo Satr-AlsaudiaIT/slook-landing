@@ -144,7 +144,7 @@ function migrate(db) {
     CREATE INDEX IF NOT EXISTS idx_services_category
       ON services(category);
 
-    CREATE INDEX IF NOT EXISTS idx_services_order
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_services_order
       ON services(category, sort_order);
   `)
 
@@ -512,14 +512,44 @@ export function listServices() {
     .prepare(`
       SELECT *
       FROM services
-      WHERE is_active = 1
       ORDER BY category, sort_order
     `)
     .all()
 }
 
-export function updateService({ id, title_en, title_ar, body_en, body_ar, icon_slug, category, sort_order, is_active }) {
-  const stmt = getDb().prepare(`
+export function updateService({
+  id,
+  title_en,
+  title_ar,
+  body_en,
+  body_ar,
+  icon_slug,
+  category,
+  sort_order,
+  is_active,
+}) {
+
+  // Get the current service
+  const current = getDb()
+    .prepare('SELECT category FROM services WHERE id = ?')
+    .get(id);
+
+  let newSortOrder = sort_order;
+
+  // If the category changed, move the service to the end of the new category
+  if (current.category !== category) {
+    const { maxOrder } = getDb()
+      .prepare(`
+        SELECT COALESCE(MAX(sort_order), 0) AS maxOrder
+        FROM services
+        WHERE category = ?
+      `)
+      .get(category);
+
+    newSortOrder = maxOrder + 1;
+  }
+
+  getDb().prepare(`
     UPDATE services
     SET
       title_en = ?,
@@ -532,23 +562,21 @@ export function updateService({ id, title_en, title_ar, body_en, body_ar, icon_s
       is_active = ?,
       updated_at = datetime('now')
     WHERE id = ?
-  `);
-
-  stmt.run(
+  `).run(
     title_en,
     title_ar,
     body_en,
     body_ar,
     icon_slug,
     category,
-    sort_order,
+    newSortOrder,
     is_active ? 1 : 0,
     id
-  )
+  );
 
   return getDb()
     .prepare('SELECT * FROM services WHERE id = ?')
-    .get(id)
+    .get(id);
 }
 
 export function deleteService(id) {
@@ -572,9 +600,15 @@ export function createService({
   body_ar,
   icon_slug,
   category,
-  sort_order,
-  is_active,
 }) {
+  const { maxOrder } = getDb()
+    .prepare(`
+      SELECT COALESCE(MAX(sort_order), 0) AS maxOrder
+      FROM services
+      WHERE category = ?
+    `)
+    .get(category);
+
   const result = getDb().prepare(`
     INSERT INTO services (
       title_en,
@@ -594,11 +628,22 @@ export function createService({
     body_ar,
     icon_slug,
     category,
-    sort_order,
-    is_active ? 1 : 0
-  )
+    maxOrder + 1,
+    1 // is_active defaults to true
+  );
 
   return getDb()
     .prepare('SELECT * FROM services WHERE id = ?')
-    .get(result.lastInsertRowid)
+    .get(result.lastInsertRowid);
+}
+
+export async function toggleServiceActive(id) {
+  await getDb().prepare(`
+    UPDATE services
+    SET is_active = CASE
+      WHEN is_active = 1 THEN 0
+      ELSE 1
+    END
+    WHERE id = ?
+  `).run(id);
 }

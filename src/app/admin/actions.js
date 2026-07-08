@@ -19,7 +19,10 @@ import {
   updateApplicationStatus,
   setApplicationAdminNotes,
   deleteApplication,
-  updateService
+  updateService,
+  deleteService,
+  toggleServiceActive,
+  createService,
 } from '@/lib/db'
 import { deleteUploadIfExists } from '@/lib/uploads'
 
@@ -238,6 +241,23 @@ export async function updateServiceAction(data) {
   })
 
   revalidatePath('/admin/services')
+}
+
+export async function deleteServiceAction(data) {
+  deleteService(data.id)
+  revalidatePath('/admin/services')
+}
+
+export async function setServiceActiveAction(id) {
+  await requireAdmin()
+  if (!id) return
+  toggleServiceActive(id)
+  revalidatePath('/admin/services')
+}
+
+export async function createServiceAction(values) {
+  createService(values);
+  revalidatePath('/admin/services');
 }
 
 /* ----------------------------- helpers ---------------------------- */

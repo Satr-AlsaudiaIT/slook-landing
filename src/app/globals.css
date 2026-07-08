@@ -25,10 +25,11 @@
   font-display: swap;
   src:
     url('/fonts/DINNextLTArabic-Regular.woff2') format('woff2'),
-    url('/fonts/DINNextLTArabic-Regular.woff')  format('woff'),
-    url('/fonts/DINNextLTArabic-Regular.ttf')   format('truetype'),
-    url('/fonts/DINNextLTArabic-Regular.otf')   format('opentype');
+    url('/fonts/DINNextLTArabic-Regular.woff') format('woff'),
+    url('/fonts/DINNextLTArabic-Regular.ttf') format('truetype'),
+    url('/fonts/DINNextLTArabic-Regular.otf') format('opentype');
 }
+
 @font-face {
   font-family: 'DIN Next LT Arabic';
   font-weight: 700;
@@ -36,9 +37,9 @@
   font-display: swap;
   src:
     url('/fonts/DINNextLTArabic-Bold.woff2') format('woff2'),
-    url('/fonts/DINNextLTArabic-Bold.woff')  format('woff'),
-    url('/fonts/DINNextLTArabic-Bold.ttf')   format('truetype'),
-    url('/fonts/DINNextLTArabic-Bold.otf')   format('opentype');
+    url('/fonts/DINNextLTArabic-Bold.woff') format('woff'),
+    url('/fonts/DINNextLTArabic-Bold.ttf') format('truetype'),
+    url('/fonts/DINNextLTArabic-Bold.otf') format('opentype');
 }
 
 :root {
@@ -84,13 +85,16 @@ html {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: #0a0a0f;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #2a1f55;
   border-radius: 8px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #3d2a82;
 }
@@ -124,11 +128,9 @@ html[dir='rtl'] .icon-flip {
 
 /* Glassy card */
 .card-glass {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(8px);
 }
@@ -179,17 +181,17 @@ html[dir='rtl'] .icon-flip {
   --radius: 0.75rem;
 }
 
-    .text-slook-purple {
-              font-size: 1rem;
+.text-slook-purple {
+  font-size: 1rem;
 
-    }
+}
 
-    .text-slook-blue {
-              font-size: 1rem;
+.text-slook-blue {
+  font-size: 1rem;
 
-    }
+}
 
- html[dir='rtl'] body {
+html[dir='rtl'] body {
   font-family: 'DIN Next LT Arabic', 'Tajawal', 'Geeza Pro', Arial, sans-serif;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
@@ -237,4 +239,163 @@ html[dir='rtl'] .text-slook-blue {
 
 .services-tabs .ant-tabs-nav::before {
   border-bottom: none !important;
+}
+
+/* antd textarea customization */
+@layer components {
+  .admin-input {
+    @apply w-full border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/35 transition-all duration-200;
+    @apply hover:border-slook-purple/40 hover:bg-white/[0.06];
+    @apply focus:border-slook-purple focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-slook-purple/20;
+  }
+
+  .admin-textarea {
+    @apply admin-input resize-none;
+  }
+}
+
+.ant-popover-container {
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 100%) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(8px) !important;
+
+  padding: 12px !important;
+  border-radius: 12px !important;
+}
+
+.ant-popconfirm-title {
+  color: #fff !important;
+}
+
+.ant-popconfirm-message-icon .anticon {
+  color: var(--slook-purple) !important;
+}
+
+/* Pop Confirm buttons */
+.ant-popconfirm-buttons .ant-btn {
+  padding-inline: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Pop Confirm Yes */
+.ant-popconfirm-buttons .ant-btn-primary {
+  background: var(--slook-purple) !important;
+  border-color: var(--slook-purple) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+
+.ant-popconfirm-buttons .ant-btn-primary:hover {
+  background: #8353f0 !important;
+  border-color: #8353f0 !important;
+}
+
+/* Pop Confirm No */
+.ant-popconfirm-buttons .ant-btn-default {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+
+.ant-popconfirm-buttons .ant-btn-default:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(114, 64, 237, 0.4) !important;
+  color: #fff !important;
+}
+
+/* Modal customization */
+
+.ltr-modal {
+  direction: ltr;
+}
+
+.rtl-modal {
+  direction: rtl;
+}
+
+.service-modal .ant-modal-container {
+  background: #111118;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect */
+/* .service-modal .ant-modal-container:hover {
+  border-color: rgba(114, 64, 237, 0.35);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(114, 64, 237, 0.08);
+} */
+
+/* Glass modal */
+/* .service-modal .ant-modal-container {
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(8px) !important;
+} */
+
+.service-modal .ant-modal-title {
+  color: white !important;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.service-modal .ant-modal-close {
+  color: rgba(255, 255, 255, .7);
+}
+
+.service-modal .ant-modal-close:hover {
+  color: white;
+}
+
+.service-modal .ant-form-item-required {
+  color: #fff !important;
+}
+
+.service-modal .ant-input,
+.ant-select {
+  background: rgba(255, 255, 255, .03) !important;
+  border: 1px solid rgba(255, 255, 255, .08) !important;
+  color: white !important;
+}
+
+.service-modal .ant-input:focus,
+.service-modal .ant-input-focused,
+.service-modal .ant-select-focused .ant-select-selector,
+.service-modal .ant-input-number-focused {
+  border-color: var(--slook-purple) !important;
+  box-shadow: none !important;
+}
+
+.ant-select-dropdown {
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.ant-select-dropdown .ant-select-item,
+.ant-select-content {
+  color: #fff !important;
+}
+
+.ant-select-dropdown .ant-select-item-option-selected {
+  background-color: rgba(114, 64, 237, 0.18) !important;
+  color: var(--slook-purple) !important;
+}
+
+.ant-select-dropdown .ant-select-item-option-active {
+  background-color: rgba(114, 64, 237, 0.18) !important;
+  color: var(--slook-purple) !important;
 }

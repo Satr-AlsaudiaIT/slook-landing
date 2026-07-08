@@ -1,34 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import {
-  Store, Megaphone, Share2, Globe, Heart, Mic,
-  Palette, FileText, Camera, BarChart2, Tv,
-  PartyPopper, Gift, MapPin, GraduationCap, Briefcase,
-} from 'lucide-react'
 import SectionHeading from './SectionHeading.jsx'
 import { useLang } from '../context/LangContext.jsx'
 import { useEffect, useState } from 'react'
-
-// Change to predefined list of icon options and dynamically import them
-const ICON_MAP = {
-  store: Store,
-  megaphone: Megaphone,
-  share2: Share2,
-  globe: Globe,
-  heart: Heart,
-  mic: Mic,
-  palette: Palette,
-  filetext: FileText,
-  camera: Camera,
-  barchart2: BarChart2,
-  tv: Tv,
-  partypopper: PartyPopper,
-  gift: Gift,
-  mappin: MapPin,
-  graduationcap: GraduationCap,
-  briefcase: Briefcase,
-}
+import * as icons from 'lucide-react';
 
 const card = {
   hidden: { opacity: 0, y: 30 },
@@ -40,6 +16,10 @@ export default function Services() {
   const { services } = t
 
   const [serviceList, setServiceList] = useState([])
+  const activeServices = serviceList.filter((s) => s.is_active === 1)
+  const serviceNumber = new Map(
+    activeServices.map((service, index) => [service.id, index + 1])
+  );
 
   // Get services from db
   useEffect(() => {
@@ -53,12 +33,12 @@ export default function Services() {
   }, [])
 
   // Filter services by category
-  const digitalServices = serviceList.filter(s => s.category === 'digital');
-  const offlineServices = serviceList.filter(s => s.category === 'offline');
-  const trainingServices = serviceList.filter(s => s.category === 'training');
+  const digitalServices = activeServices.filter((s) => s.category === 'digital');
+  const offlineServices = activeServices.filter((s) => s.category === 'offline');
+  const trainingServices = activeServices.filter((s) => s.category === 'training');
 
   function ServiceCard({ item, accent }) {
-    const Icon = ICON_MAP[item.icon_slug]
+    const Icon = icons[item.icon_slug];
     return (
       <motion.article
         variants={card}
@@ -70,7 +50,7 @@ export default function Services() {
           aria-hidden
           className="pointer-events-none absolute top-3 ltr:right-4 rtl:left-4 service-num opacity-30"
         >
-          {String(item.sort_order ?? item.id).padStart(2, '0')}
+          {String(serviceNumber.get(item.id)).padStart(2, '0')}
         </span>
 
         <div
@@ -79,7 +59,7 @@ export default function Services() {
             : 'bg-gradient-to-br from-slook-purple/30 to-slook-blue/20 text-slook-purple'
             }`}
         >
-          <Icon className="size-5" />
+          {Icon && <Icon className="size-5" />}
         </div>
 
         <h3 className="mt-5 text-lg font-semibold leading-snug">{lang === 'ar' ? item.title_ar : item.title_en}</h3>
@@ -88,7 +68,7 @@ export default function Services() {
     )
   }
 
-  if (!serviceList.length) {
+  if (!activeServices.length) {
     return <></>;
   }
 
